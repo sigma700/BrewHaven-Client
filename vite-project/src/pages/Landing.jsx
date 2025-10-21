@@ -3,7 +3,7 @@ import React from "react";
 const content = [
   {
     url: "/src/assets/lekhashri-k-cTly5TvGnDU-unsplash.jpg",
-    desc: "We hav ebeen in the game for the longest time than you think.",
+    desc: "Got into our first conract as the best coffee breweries in the nation aled by Thomas Shelby the standing CEO at that moment of greatness for us !",
     cssPos: "col-span-4 row-span-2 lg:h-[400px] object-cover w-full",
   },
   {
@@ -145,12 +145,22 @@ const Landing = () => {
           Brief History
         </h3>
         <div className="grid lg:grid-cols-4">
-          {content.map((item) => (
-            <img
-              className={`${item.cssPos} lg:h-[500px] w-full object-cover border-white border-[3px]`}
-              src={item.url}
-              alt=""
-            />
+          {content.map((item, index) => (
+            <div
+              key={index}
+              className={`${item.cssPos} lg:h-[500px] w-full relative overflow-hidden group border-white border-[3px]`}
+            >
+              <img
+                className="w-full h-full group-hover:opacity-[0.9] object-cover transition-transform duration-500 group-hover:scale-110"
+                src={item.url}
+                alt=""
+              />
+              <div className="absolute inset-0 bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-500 flex items-center justify-center p-6">
+                <p className="text-white text-center transform translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-100 lg:text-[20px] font-bold">
+                  {item.desc}
+                </p>
+              </div>
+            </div>
           ))}
         </div>
       </div>
