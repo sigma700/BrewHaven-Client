@@ -9,29 +9,29 @@ const content = [
   {
     url: "/src/assets/elin-melaas-ML_mP7oWLRk-unsplash.jpg",
     desc: "Every sip has a story behind it and this is the main area of focus.",
-    cssPos: "row-start-3",
+    cssPos: "lg:row-start-3",
   },
   {
     url: "/src/assets/anita-jankovic-gAnrjbnRcWM-unsplash.jpg",
     desc: "We don't dissapoint as long as you become a loyal customer.",
-    cssPos: "row-start-3",
+    cssPos: "lg:row-start-3",
   },
   {
     url: "/src/assets/brandon-leclaire-GrWScBV6yg4-unsplash.jpg",
     desc: "Believe in us and let us deliver",
-    cssPos: "row-start-3",
+    cssPos: "lg:row-start-3",
   },
   {
     url: "/src/assets/pratik-prasad-JnVFfSwLWoc-unsplash.jpg",
     desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur, voluptatum commodi modi dolor incidunt, animi aut magnam unde a, ullam nam repellat qui. Dignissimos, amet inventore necessitatibus dolorum molestias eos!",
-    cssPos: "row-start-3",
+    cssPos: "lg:row-start-3",
   },
 ];
 
 const Landing = () => {
   return (
     <main className="min-h-screen bg-cover bg-[url(/src/assets/alin-luna-lGl3spVIU0g-unsplash.jpg)] bg-fixed">
-      <div className="min-h-screen bg-white/95 backdrop-blur-sm rounded-b-[40%] lg:rounded-b-[30%] shadow-2xl">
+      <div className="bg-white/95 backdrop-blur-sm rounded-b-[40%] lg:rounded-b-[30%] shadow-2xl">
         <section className="p-6 lg:p-12 lg:flex flex-col lg:gap-32">
           <nav className="flex justify-between items-center">
             {/* Logo */}
@@ -122,16 +122,16 @@ const Landing = () => {
         id="about"
         className="h-32 bg-gradient-to-t from-amber-900/10 to-transparent rounded-t-[100%] text-black lg:p-[30px]"
       >
-        <h1 className="text-white font-extrabold text-center lg:text-[40px] mt-[20px]">
+        <h1 className="text-white font-extrabold text-center text-[30px] lg:text-[40px] mt-[20px]">
           About Us
         </h1>
-        <div className="bg-white lg:flex lg:gap-[20px] items-center lg:mt-[20px]">
+        <div className="bg-white lg:flex lg:gap-[20px] items-center lg:mt-[20px] mt-[10px]">
           <img
-            className="rounded-tl-[60%] rounded-tr-[40%] rounded-br-[30%] rounded-bl-[70%] w-[800px] lg:mt-[40px]"
+            className="rounded-tl-[60%] rounded-tr-[40%] rounded-br-[30%] rounded-bl-[70%] w-[800px] lg:mt-[40px] mt-[20px]"
             src="/src/assets/pexels-streetwindy-4079749.jpg"
             alt=""
           />
-          <p className="text-black font-light text-[25px]">
+          <p className="text-black font-light text-[20px] mt-[10px] text-center lg:m-0  lg:text-[25px]">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam
             ratione eaque molestias dignissimos fugit, doloremque reiciendis,
             cupiditate, illum corporis voluptate voluptatum. Reprehenderit
@@ -141,10 +141,10 @@ const Landing = () => {
 
         {/* history section */}
 
-        <h3 className="text-[30px] font-bold text  text-amber-900">
+        <h3 className="text-[30px] font-bold text mt-[20px] lg:m-0 text-amber-900">
           Brief History
         </h3>
-        <div className="grid lg:grid-cols-4">
+        <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1">
           {content.map((item, index) => (
             <div
               key={index}
@@ -166,8 +166,22 @@ const Landing = () => {
       </div>
 
       {/* products section */}
-      <section>
-        <div></div>
+      <section className="">
+        <h2>Products</h2>
+        <div>
+          {/* when the user clicks an item on the products section we are going to make the content about that particular project appear to be more detailed */}
+          {[
+            "/public/erik-mclean-FL3NmWxw0ok-unsplash.jpg",
+            "/public/khanh-nguyen-jaChzCAVaTU-unsplash.jpg",
+            "/public/lisanto-J73tNVo5oZM-unsplash.jpg",
+            "/public/sara-dubler-2u7KhYAl24A-unsplash.jpg",
+            "/public/tyler-d0ZOLC5ptNY-unsplash.jpg",
+          ].map((item, index) => (
+            <div key={index}>
+              <h2></h2>
+            </div>
+          ))}
+        </div>
       </section>
     </main>
   );
