@@ -269,7 +269,7 @@ const Landing = () => {
               Product added to cart successfully!
             </motion.div>
           )}
-
+          {/* TODO:IMPROVE THE UI OF THE SUCCESS AND ERROR MESSAGES */}
           {error && (
             <motion.div
               initial={{opacity: 0, y: -10}}
@@ -283,7 +283,7 @@ const Landing = () => {
           {/* Product Grid */}
           <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10">
             {products.map((product, index) => {
-              // Check if product is in cart and get its quantity
+              // Check if product is in cart and get its quantity Tto avoid adding null objects to the cart
               const cartItem = cart.find((item) => item.id === product.id);
               const quantity = cartItem ? cartItem.quantity : 0;
 
@@ -295,7 +295,6 @@ const Landing = () => {
                   transition={{duration: 0.6, delay: index * 0.1}}
                   className="group relative bg-white/70 backdrop-blur-xl rounded-3xl shadow-lg hover:shadow-2xl border border-amber-100 transition-all duration-500 hover:-translate-y-3 overflow-hidden"
                 >
-                  {/* Product Image */}
                   <div className="relative overflow-hidden rounded-t-3xl">
                     <img
                       src={product.image}
@@ -378,7 +377,7 @@ const Landing = () => {
               </button>
             </Link>
 
-            {/* Clear Cart Button (optional) */}
+            {/* clear cart button */}
             {cart.length > 0 && (
               <button
                 onClick={clearCart}

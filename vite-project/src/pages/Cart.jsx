@@ -68,7 +68,7 @@ const Cart = () => {
           </p>
 
           <div className="grid lg:grid-cols-3 gap-8">
-            {/* Cart Items */}
+            {/* Items that are supposed to be put into the cart */}
             <div className="lg:col-span-2">
               <div className="bg-white rounded-3xl shadow-lg p-6">
                 <div className="flex justify-between items-center mb-6">
@@ -92,7 +92,7 @@ const Cart = () => {
                       transition={{duration: 0.5, delay: index * 0.1}}
                       className="flex flex-col lg:flex-row gap-4 p-4 border border-amber-100 rounded-2xl hover:shadow-md transition-shadow duration-300"
                     >
-                      {/* Product Image */}
+                      {/*Image of the code */}
                       <div className="lg:w-32 lg:h-32 w-full h-48 flex-shrink-0">
                         <img
                           src={item.image}
@@ -101,7 +101,7 @@ const Cart = () => {
                         />
                       </div>
 
-                      {/* Product Details */}
+                      {/*Details of the products */}
                       <div className="flex-1">
                         <div className="flex justify-between items-start mb-2">
                           <h3 className="text-xl font-semibold text-amber-900">
@@ -204,7 +204,7 @@ const Cart = () => {
                   Continue Shopping
                 </a>
 
-                {/* Additional Info */}
+                {/* Additional Info about the product*/}
                 <div className="mt-6 p-4 bg-amber-50 rounded-xl">
                   <div className="flex items-center gap-3 text-amber-700 mb-2">
                     <span>🚚</span>
