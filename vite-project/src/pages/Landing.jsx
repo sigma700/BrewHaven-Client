@@ -6,6 +6,7 @@ import BlogPost from "./components/blog";
 import BlogGrid from "./components/blog";
 import ContactForm from "./components/contactForm";
 import Footer from "./components/footer";
+import {FullMenu} from "./components/mobileMenu";
 
 const content = [
   {
@@ -145,11 +146,9 @@ const Landing = () => {
       </nav>
 
       {/* Mobile Menu Button */}
-      <button className="lg:hidden fixed top-6 right-6 z-50 p-2 bg-white rounded-full shadow-lg border border-amber-200">
-        <div className="w-6 h-0.5 bg-gray-800 mb-1"></div>
-        <div className="w-6 h-0.5 bg-gray-800 mb-1"></div>
-        <div className="w-6 h-0.5 bg-gray-800"></div>
-      </button>
+      <div className="lg:hidden fixed top-6 right-6 z-50 p-2 bg-white rounded-full shadow-lg border border-amber-200">
+        <FullMenu />
+      </div>
 
       {/* Hero Section */}
       <div className="bg-white/95 backdrop-blur-sm rounded-b-[10%] md:rounded-b-[20%] lg:rounded-b-[30%] shadow-2xl">
