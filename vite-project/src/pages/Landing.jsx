@@ -5,6 +5,7 @@ import {Link} from "react-router-dom";
 import BlogPost from "./components/blog";
 import BlogGrid from "./components/blog";
 import ContactForm from "./components/contactForm";
+import Footer from "./components/footer";
 
 const content = [
   {
@@ -157,7 +158,7 @@ const Landing = () => {
               </h3>
 
               <h1 className="text-4xl lg:text-6xl font-extrabold text-gray-900 mb-6 leading-tight">
-                Start your day fresh with our special offerings
+                Start your day fresh with our special offers
               </h1>
 
               <p className="text-lg lg:text-xl text-gray-600 mb-8 leading-relaxed">
@@ -404,6 +405,11 @@ const Landing = () => {
       {/* contact us section */}
       <section>
         <ContactForm />
+      </section>
+
+      {/* footer of my page */}
+      <section>
+        <Footer />
       </section>
     </main>
   );
