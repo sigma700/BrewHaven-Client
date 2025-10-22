@@ -31,36 +31,41 @@ const content = [
   },
 ];
 
-const products = [
+export const products = [
   {
     name: "Jumping Bean",
     price: "$24.99",
     description: "Rich and smooth with chocolate notes",
     image: "/erik-mclean-FL3NmWxw0ok-unsplash.jpg",
+    id: 1,
   },
   {
     name: "White Coffee",
     price: "$19.99",
     description: "Strong and bold with earthy tones",
     image: "/khanh-nguyen-jaChzCAVaTU-unsplash.jpg",
+    id: 2,
   },
   {
     name: "Feeling 18",
     price: "$29.99",
     description: "Floral and citrusy with bright acidity",
     image: "/lisanto-J73tNVo5oZM-unsplash.jpg",
+    id: 3,
   },
   {
     name: "The Good Life",
     price: "$26.99",
     description: "Well-balanced with caramel sweetness",
     image: "/sara-dubler-2u7KhYAl24A-unsplash.jpg",
+    id: 4,
   },
   {
     name: "Craffty Common",
     price: "$22.99",
     description: "Nutty and smooth with low acidity",
     image: "/tyler-d0ZOLC5ptNY-unsplash.jpg",
+    id: 5,
   },
 ];
 
