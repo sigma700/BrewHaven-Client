@@ -3,7 +3,7 @@ import React from "react";
 const content = [
   {
     url: "/src/assets/lekhashri-k-cTly5TvGnDU-unsplash.jpg",
-    desc: "Got into our first conract as the best coffee breweries in the nation aled by Thomas Shelby the standing CEO at that moment of greatness for us !",
+    desc: "Got into our first contract as the best coffee breweries in the nation led by Thomas Shelby the standing CEO at that moment of greatness for us!",
     cssPos: "col-span-4 row-span-2 lg:h-[400px] object-cover w-full",
   },
   {
@@ -13,7 +13,7 @@ const content = [
   },
   {
     url: "/src/assets/anita-jankovic-gAnrjbnRcWM-unsplash.jpg",
-    desc: "We don't dissapoint as long as you become a loyal customer.",
+    desc: "We don't disappoint as long as you become a loyal customer.",
     cssPos: "lg:row-start-3",
   },
   {
@@ -25,6 +25,39 @@ const content = [
     url: "/src/assets/pratik-prasad-JnVFfSwLWoc-unsplash.jpg",
     desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur, voluptatum commodi modi dolor incidunt, animi aut magnam unde a, ullam nam repellat qui. Dignissimos, amet inventore necessitatibus dolorum molestias eos!",
     cssPos: "lg:row-start-3",
+  },
+];
+
+const products = [
+  {
+    name: "Jumping Bean",
+    price: "$24.99",
+    description: "Rich and smooth with chocolate notes",
+    image: "/erik-mclean-FL3NmWxw0ok-unsplash.jpg",
+  },
+  {
+    name: "White Coffee",
+    price: "$19.99",
+    description: "Strong and bold with earthy tones",
+    image: "/khanh-nguyen-jaChzCAVaTU-unsplash.jpg",
+  },
+  {
+    name: "Feeling 18",
+    price: "$29.99",
+    description: "Floral and citrusy with bright acidity",
+    image: "/lisanto-J73tNVo5oZM-unsplash.jpg",
+  },
+  {
+    name: "The Good Life",
+    price: "$26.99",
+    description: "Well-balanced with caramel sweetness",
+    image: "/sara-dubler-2u7KhYAl24A-unsplash.jpg",
+  },
+  {
+    name: "Craffty Common",
+    price: "$22.99",
+    description: "Nutty and smooth with low acidity",
+    image: "/tyler-d0ZOLC5ptNY-unsplash.jpg",
   },
 ];
 
@@ -44,7 +77,7 @@ const Landing = () => {
               </a>
             </p>
 
-            {/* Navigation Links with good responsiveness fam */}
+            {/* Navigation Links */}
             <ul className="hidden lg:flex gap-8">
               {["Home", "About", "Products", "Blog", "Contacts"].map((item) => (
                 <li key={item}>
@@ -74,6 +107,7 @@ const Landing = () => {
             <div className="w-6 h-0.5 bg-gray-800 mb-1"></div>
             <div className="w-6 h-0.5 bg-gray-800"></div>
           </button>
+
           <section className="lg:flex justify-around">
             <div className="mt-16 lg:mt-0 max-w-2xl">
               <h3 className="text-lg lg:text-xl text-amber-600 mb-4 font-semibold">
@@ -101,9 +135,11 @@ const Landing = () => {
                     Discover More
                   </button>
                 </a>
-                <button className="px-8 py-4 border-2 border-amber-800 text-amber-800 font-bold rounded-full hover:bg-amber-50 transition-all duration-300">
-                  View Menu
-                </button>
+                <a href="#products">
+                  <button className="px-8 py-4 border-2 border-amber-800 text-amber-800 font-bold rounded-full hover:bg-amber-50 transition-all duration-300">
+                    View Menu
+                  </button>
+                </a>
               </div>
             </div>
             <div>
@@ -120,18 +156,18 @@ const Landing = () => {
       {/* About us section */}
       <div
         id="about"
-        className="h-32 bg-gradient-to-t from-amber-900/10 to-transparent rounded-t-[100%] text-black lg:p-[30px]"
+        className="bg-gradient-to-t from-amber-900/10 to-transparent rounded-t-[100%] text-black lg:p-[30px] pt-16"
       >
         <h1 className="text-white font-extrabold text-center text-[30px] lg:text-[40px] mt-[20px]">
           About Us
         </h1>
-        <div className="bg-white lg:flex lg:gap-[20px] items-center lg:mt-[20px] mt-[10px]">
+        <div className="bg-white lg:flex lg:gap-[20px] items-center lg:mt-[20px] mt-[10px] lg:p-8 p-4">
           <img
-            className="rounded-tl-[60%] rounded-tr-[40%] rounded-br-[30%] rounded-bl-[70%] w-[800px] lg:mt-[40px] mt-[20px]"
+            className="rounded-tl-[60%] rounded-tr-[40%] rounded-br-[30%] rounded-bl-[70%] w-full lg:w-[800px] lg:mt-[40px] mt-[20px]"
             src="/src/assets/pexels-streetwindy-4079749.jpg"
-            alt=""
+            alt="About BrewHaven"
           />
-          <p className="text-black font-light text-[20px] mt-[10px] text-center lg:m-0  lg:text-[25px]">
+          <p className="text-black font-light text-[20px] mt-[10px] text-center lg:m-0 lg:text-[25px] lg:text-left">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam
             ratione eaque molestias dignissimos fugit, doloremque reiciendis,
             cupiditate, illum corporis voluptate voluptatum. Reprehenderit
@@ -140,51 +176,76 @@ const Landing = () => {
         </div>
 
         {/* history section */}
-
-        <h3 className="text-[30px] font-bold text mt-[20px] lg:m-0 text-amber-900">
-          Brief History
-        </h3>
-        <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1">
-          {content.map((item, index) => (
-            <div
-              key={index}
-              className={`${item.cssPos} lg:h-[500px] w-full relative overflow-hidden group border-white border-[3px]`}
-            >
-              <img
-                className="w-full h-full group-hover:opacity-[0.9] object-cover transition-transform duration-500 group-hover:scale-110"
-                src={item.url}
-                alt=""
-              />
-              <div className="absolute inset-0 bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-500 flex items-center justify-center p-6">
-                <p className="text-white text-center transform translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-100 lg:text-[20px] font-bold">
-                  {item.desc}
-                </p>
+        <div className="bg-white lg:p-8 p-4">
+          <h3 className="text-[30px] font-bold text-amber-900 text-center lg:text-left">
+            Brief History
+          </h3>
+          <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-4 mt-6">
+            {content.map((item, index) => (
+              <div
+                key={index}
+                className={`${item.cssPos} lg:h-[500px] w-full relative overflow-hidden group border-white border-[3px] rounded-lg`}
+              >
+                <img
+                  className="w-full h-full group-hover:opacity-[0.9] object-cover transition-transform duration-500 group-hover:scale-110"
+                  src={item.url}
+                  alt=""
+                />
+                <div className="absolute inset-0 bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-500 flex items-center justify-center p-6">
+                  <p className="text-white text-center transform translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-100 lg:text-[16px] font-bold">
+                    {item.desc}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
 
       {/* products section */}
-      <section className="">
-        <h2>Products</h2>
-        <div>
-          {/* when the user clicks an item on the products section we are going to make the content about that particular project appear to be more detailed */}
-          {[
-            "/public/erik-mclean-FL3NmWxw0ok-unsplash.jpg",
-            "/public/khanh-nguyen-jaChzCAVaTU-unsplash.jpg",
-            "/public/lisanto-J73tNVo5oZM-unsplash.jpg",
-            "/public/sara-dubler-2u7KhYAl24A-unsplash.jpg",
-            "/public/tyler-d0ZOLC5ptNY-unsplash.jpg",
-          ].map((item, index) => (
-            <div key={index}>
-              <h2></h2>
-            </div>
-          ))}
+      <section id="products" className="bg-white py-16 lg:py-24">
+        <div className="container mx-auto px-4 lg:px-8">
+          <h2 className="text-4xl lg:text-5xl font-extrabold text-amber-900 text-center mb-4">
+            Our Products
+          </h2>
+          <p className="text-lg lg:text-xl text-gray-600 text-center mb-12 max-w-2xl mx-auto">
+            Discover our premium selection of carefully sourced and roasted
+            coffee beans
+          </p>
+
+          <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-8">
+            {products.map((product, index) => (
+              <div
+                key={index}
+                className="bg-amber-50 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group cursor-pointer"
+              >
+                <div className="relative overflow-hidden">
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute top-4 right-4 bg-amber-800 text-white px-3 py-1 rounded-full font-bold">
+                    {product.price}
+                  </div>
+                </div>
+
+                <div className="p-6">
+                  <h3 className="text-2xl font-bold text-amber-900 mb-2">
+                    {product.name}
+                  </h3>
+                  <p className="text-gray-600 mb-4">{product.description}</p>
+                  <button className="w-full bg-amber-800 text-white py-3 rounded-full font-bold hover:bg-amber-700 transition-colors duration-300">
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </main>
   );
 };
-//this is the main area of focus and this is the main area of focus and should be making alot of sense fam remember practice makes perfect
+
 export default Landing;
