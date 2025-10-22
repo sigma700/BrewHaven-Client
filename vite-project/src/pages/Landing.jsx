@@ -1,4 +1,7 @@
 import React from "react";
+import {motion} from "framer-motion";
+import {useBasket} from "../store/stateFiles";
+import {Link} from "react-router-dom";
 
 const content = [
   {
@@ -62,6 +65,15 @@ const products = [
 ];
 
 const Landing = () => {
+  const {
+    addToCart,
+    removeFromCart,
+    updateCart,
+    cart,
+    success,
+    error,
+    resetCart,
+  } = useBasket();
   return (
     <main className="min-h-screen bg-cover bg-[url(/src/assets/alin-luna-lGl3spVIU0g-unsplash.jpg)] bg-fixed">
       <div className="bg-white/95 backdrop-blur-sm rounded-b-[40%] lg:rounded-b-[30%] shadow-2xl">
@@ -203,46 +215,77 @@ const Landing = () => {
       </div>
 
       {/* products section */}
-      <section id="products" className="bg-white py-16 lg:py-24">
-        <div className="container mx-auto px-4 lg:px-8">
-          <h2 className="text-4xl lg:text-5xl font-extrabold text-amber-900 text-center mb-4">
-            Our Products
-          </h2>
-          <p className="text-lg lg:text-xl text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-            Discover our premium selection of carefully sourced and roasted
-            coffee beans
-          </p>
+      <section
+        id="products"
+        className="relative bg-gradient-to-b from-amber-50 via-white to-amber-50 py-20 lg:py-28 overflow-hidden"
+      >
+        <div className="container mx-auto px-6 lg:px-12">
+          {/* Title + Subtitle */}
+          <motion.div
+            initial={{opacity: 0, y: 30}}
+            whileInView={{opacity: 1, y: 0}}
+            transition={{duration: 0.8, ease: "easeOut"}}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl lg:text-5xl font-extrabold text-amber-900 tracking-tight drop-shadow-sm">
+              Our Products
+            </h2>
+            <p className="text-lg lg:text-xl text-gray-600 mt-4 max-w-2xl mx-auto">
+              Discover our premium selection of carefully sourced and roasted
+              coffee beans.
+            </p>
+          </motion.div>
 
-          <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-8">
+          {/* Product Grid */}
+          <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10">
             {products.map((product, index) => (
-              <div
+              <motion.div
                 key={index}
-                className="bg-amber-50 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group cursor-pointer"
+                initial={{opacity: 0, y: 50}}
+                whileInView={{opacity: 1, y: 0}}
+                transition={{duration: 0.6, delay: index * 0.1}}
+                className="group relative bg-white/70 backdrop-blur-xl rounded-3xl shadow-lg hover:shadow-2xl border border-amber-100 transition-all duration-500 hover:-translate-y-3 overflow-hidden"
               >
-                <div className="relative overflow-hidden">
+                {/* Product Image */}
+                <div className="relative overflow-hidden rounded-t-3xl">
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                    className="w-full h-64 object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                   />
-                  <div className="absolute top-4 right-4 bg-amber-800 text-white px-3 py-1 rounded-full font-bold">
+                  <div className="absolute top-5 right-5 bg-gradient-to-r from-amber-800 to-amber-600 text-white px-4 py-1 rounded-full font-semibold shadow-md">
                     {product.price}
                   </div>
                 </div>
 
+                {/* Product Details */}
                 <div className="p-6">
                   <h3 className="text-2xl font-bold text-amber-900 mb-2">
                     {product.name}
                   </h3>
-                  <p className="text-gray-600 mb-4">{product.description}</p>
-                  <button className="w-full bg-amber-800 text-white py-3 rounded-full font-bold hover:bg-amber-700 transition-colors duration-300">
-                    Add to Cart
+                  <p className="text-gray-600 mb-6 leading-relaxed">
+                    {product.description}
+                  </p>
+                  <button
+                    onClick={addToCart}
+                    className="relative w-full bg-amber-800 text-white py-3 rounded-full font-semibold transition-all duration-300 hover:bg-amber-700 overflow-hidden"
+                  >
+                    <span className="relative z-10">Add to Cart</span>
+                    <span className="absolute inset-0 bg-white/20 scale-0 group-hover:scale-100 transition-transform duration-500 rounded-full"></span>
                   </button>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
+          <Link to={"/cart"}>
+            <button className="text-white hover:bg-amber-100 hover:border-black hover:text-black hover:cursor-pointer hover:transition-colors hover:duration-[0.4s] duration-75 lg:p-[10px] rounded-2xl border bg-[#b57539] lg:text-[30px] font-light lg:mt-[30px]">
+              Your cart : {cart}
+            </button>
+          </Link>
         </div>
+
+        <div className="absolute -top-20 -left-20 w-72 h-72 bg-amber-200/40 blur-3xl rounded-full"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-amber-300/30 blur-3xl rounded-full"></div>
       </section>
     </main>
   );
