@@ -4,6 +4,7 @@ import {useBasket} from "../store/stateFiles";
 import {Link} from "react-router-dom";
 import BlogPost from "./components/blog";
 import BlogGrid from "./components/blog";
+import ContactForm from "./components/contactForm";
 
 const content = [
   {
@@ -398,6 +399,11 @@ const Landing = () => {
       {/* blogs section */}
       <section className="bg-amber-100">
         <BlogGrid />
+      </section>
+
+      {/* contact us section */}
+      <section>
+        <ContactForm />
       </section>
     </main>
   );

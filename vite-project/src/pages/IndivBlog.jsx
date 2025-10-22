@@ -9,7 +9,7 @@ const coffeeStories = [
     title: "Coffee Prices Surge to Record Highs - What's Next for 2026?",
     excerpt:
       "Arabica futures reached unprecedented levels of $4.41/lb, creating new challenges across the supply chain as prices remain consistently high.",
-    image: "/public/market.jpg",
+    image: "/market.jpg",
     category: "Market Trends",
     readTime: "4 min read",
     date: "2025-10-22",
@@ -23,7 +23,7 @@ const coffeeStories = [
     title: "Deforestation Imperils Coffee Production in Brazil",
     excerpt:
       "New research reveals how forest clearing for coffee farms reduces rainfall and threatens long-term crop viability.",
-    image: "/public/defforest.jpg",
+    image: "/defforest.jpg",
     category: "Sustainability",
     readTime: "5 min read",
     date: "2025-10-22",
@@ -37,7 +37,7 @@ const coffeeStories = [
     title: "The Dancing Goats: Ethiopia's Coffee Discovery Legend",
     excerpt:
       "How a 9th-century goatherd named Kaldi discovered coffee's energizing effects through his lively goats.",
-    image: "/public/ethiopia.jpg",
+    image: "/ethiopia.jpg",
     category: "History",
     readTime: "3 min read",
     date: "2025-10-20",
@@ -51,7 +51,7 @@ const coffeeStories = [
     title: "Coffee Houses Fueled the French Revolution",
     excerpt:
       "How Parisian cafés became breeding grounds for revolutionary ideas and political change in 18th century France.",
-    image: "/public/french-rev.jpg",
+    image: "/french-rev.jpg",
     category: "Culture",
     readTime: "4 min read",
     date: "2025-10-18",
@@ -65,7 +65,7 @@ const coffeeStories = [
     title: "Australia's Jack Simpson Crowned 2025 World Barista Champion",
     excerpt:
       "After remarkable back-to-back performances, Simpson claims the top prize in international coffee competition.",
-    image: "/public/barista-sam.jpg",
+    image: "/barista-sam.jpg",
     category: "Industry News",
     readTime: "3 min read",
     date: "2025-10-15",
@@ -79,7 +79,7 @@ const coffeeStories = [
     title: "The Swedish King's Failed Coffee Experiment",
     excerpt:
       "How Gustav III's attempt to prove coffee's dangers backfired spectacularly in the 18th century.",
-    image: "/public/experiment.jpg",
+    image: "/experiment.jpg",
     category: "History",
     readTime: "3 min read",
     date: "2025-10-12",
