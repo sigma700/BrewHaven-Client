@@ -2,6 +2,8 @@ import React from "react";
 import {motion} from "framer-motion";
 import {useBasket} from "../store/stateFiles";
 import {Link} from "react-router-dom";
+import BlogPost from "./components/blog";
+import BlogGrid from "./components/blog";
 
 const content = [
   {
@@ -391,6 +393,11 @@ const Landing = () => {
 
         <div className="absolute -top-20 -left-20 w-72 h-72 bg-amber-200/40 blur-3xl rounded-full"></div>
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-amber-300/30 blur-3xl rounded-full"></div>
+      </section>
+
+      {/* blogs section */}
+      <section className="bg-amber-100">
+        <BlogGrid />
       </section>
     </main>
   );
