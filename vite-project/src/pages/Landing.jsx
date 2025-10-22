@@ -74,11 +74,29 @@ const Landing = () => {
     addToCart,
     removeFromCart,
     updateCart,
+    updateQuantity,
     cart,
+    getTotalItems,
+    getTotalPrice,
     success,
     error,
-    resetCart,
+    clearCart,
   } = useBasket();
+
+  const handleAddToCart = (productId) => {
+    addToCart(productId);
+
+    // Optional: Show success message
+    if (success) {
+      console.log("Product added to cart!");
+    }
+
+    // Optional: Show error message
+    if (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <main className="min-h-screen bg-cover bg-[url(/src/assets/alin-luna-lGl3spVIU0g-unsplash.jpg)] bg-fixed">
       <div className="bg-white/95 backdrop-blur-sm rounded-b-[40%] lg:rounded-b-[30%] shadow-2xl">
@@ -241,52 +259,135 @@ const Landing = () => {
             </p>
           </motion.div>
 
+          {/* Success/Error Messages */}
+          {success && (
+            <motion.div
+              initial={{opacity: 0, y: -10}}
+              animate={{opacity: 1, y: 0}}
+              className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6 text-center"
+            >
+              Product added to cart successfully!
+            </motion.div>
+          )}
+
+          {error && (
+            <motion.div
+              initial={{opacity: 0, y: -10}}
+              animate={{opacity: 1, y: 0}}
+              className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6 text-center"
+            >
+              {error}
+            </motion.div>
+          )}
+
           {/* Product Grid */}
           <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10">
-            {products.map((product, index) => (
-              <motion.div
-                key={index}
-                initial={{opacity: 0, y: 50}}
-                whileInView={{opacity: 1, y: 0}}
-                transition={{duration: 0.6, delay: index * 0.1}}
-                className="group relative bg-white/70 backdrop-blur-xl rounded-3xl shadow-lg hover:shadow-2xl border border-amber-100 transition-all duration-500 hover:-translate-y-3 overflow-hidden"
-              >
-                {/* Product Image */}
-                <div className="relative overflow-hidden rounded-t-3xl">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-64 object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-                  />
-                  <div className="absolute top-5 right-5 bg-gradient-to-r from-amber-800 to-amber-600 text-white px-4 py-1 rounded-full font-semibold shadow-md">
-                    {product.price}
-                  </div>
-                </div>
+            {products.map((product, index) => {
+              // Check if product is in cart and get its quantity
+              const cartItem = cart.find((item) => item.id === product.id);
+              const quantity = cartItem ? cartItem.quantity : 0;
 
-                {/* Product Details */}
-                <div className="p-6">
-                  <h3 className="text-2xl font-bold text-amber-900 mb-2">
-                    {product.name}
-                  </h3>
-                  <p className="text-gray-600 mb-6 leading-relaxed">
-                    {product.description}
-                  </p>
-                  <button
-                    onClick={addToCart}
-                    className="relative w-full bg-amber-800 text-white py-3 rounded-full font-semibold transition-all duration-300 hover:bg-amber-700 overflow-hidden"
-                  >
-                    <span className="relative z-10">Add to Cart</span>
-                    <span className="absolute inset-0 bg-white/20 scale-0 group-hover:scale-100 transition-transform duration-500 rounded-full"></span>
-                  </button>
-                </div>
-              </motion.div>
-            ))}
+              return (
+                <motion.div
+                  key={product.id}
+                  initial={{opacity: 0, y: 50}}
+                  whileInView={{opacity: 1, y: 0}}
+                  transition={{duration: 0.6, delay: index * 0.1}}
+                  className="group relative bg-white/70 backdrop-blur-xl rounded-3xl shadow-lg hover:shadow-2xl border border-amber-100 transition-all duration-500 hover:-translate-y-3 overflow-hidden"
+                >
+                  {/* Product Image */}
+                  <div className="relative overflow-hidden rounded-t-3xl">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-full h-64 object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                    />
+                    <div className="absolute top-5 right-5 bg-gradient-to-r from-amber-800 to-amber-600 text-white px-4 py-1 rounded-full font-semibold shadow-md">
+                      {product.price}
+                    </div>
+
+                    {/* Quantity Badge */}
+                    {quantity > 0 && (
+                      <div className="absolute top-5 left-5 bg-amber-900 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">
+                        {quantity}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Product Details */}
+                  <div className="p-6">
+                    <h3 className="text-2xl font-bold text-amber-900 mb-2">
+                      {product.name}
+                    </h3>
+                    <p className="text-gray-600 mb-6 leading-relaxed">
+                      {product.description}
+                    </p>
+
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleAddToCart(product.id)}
+                        className="flex-1 bg-amber-800 text-white py-3 rounded-full font-semibold transition-all duration-300 hover:bg-amber-700 hover:shadow-lg"
+                      >
+                        Add to Cart
+                      </button>
+
+                      {quantity > 0 && (
+                        <button
+                          onClick={() => removeFromCart(product.id)}
+                          className="px-4 bg-red-500 text-white rounded-full font-semibold transition-all duration-300 hover:bg-red-600"
+                        >
+                          Remove
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Quantity Controls */}
+                    {quantity > 0 && (
+                      <div className="flex items-center justify-center gap-3 mt-3">
+                        <button
+                          onClick={() =>
+                            updateQuantity(product.id, quantity - 1)
+                          }
+                          className="w-8 h-8 bg-amber-200 rounded-full flex items-center justify-center hover:bg-amber-300"
+                        >
+                          -
+                        </button>
+                        <span className="font-semibold">Qty: {quantity}</span>
+                        <button
+                          onClick={() =>
+                            updateQuantity(product.id, quantity + 1)
+                          }
+                          className="w-8 h-8 bg-amber-200 rounded-full flex items-center justify-center hover:bg-amber-300"
+                        >
+                          +
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
-          <Link to={"/cart"}>
-            <button className="text-white hover:bg-amber-100 hover:border-black hover:text-black hover:cursor-pointer hover:transition-colors hover:duration-[0.4s] duration-75 lg:p-[10px] rounded-2xl border bg-[#b57539] lg:text-[30px] font-light lg:mt-[30px]">
-              Your cart : {cart}
-            </button>
-          </Link>
+
+          {/* Cart Summary */}
+          <div className="text-center mt-12">
+            <Link to="/cart">
+              <button className="text-white hover:bg-amber-100 hover:border-black hover:text-black hover:cursor-pointer hover:transition-colors hover:duration-[0.4s] duration-75 lg:p-4 px-6 rounded-2xl border bg-[#b57539] lg:text-2xl text-xl font-light">
+                Your Cart: {getTotalItems()} items ($
+                {getTotalPrice().toFixed(2)})
+              </button>
+            </Link>
+
+            {/* Clear Cart Button (optional) */}
+            {cart.length > 0 && (
+              <button
+                onClick={clearCart}
+                className="ml-4 lg:p-4 px-6 rounded-2xl border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-colors duration-300 text-lg font-light"
+              >
+                Clear Cart
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="absolute -top-20 -left-20 w-72 h-72 bg-amber-200/40 blur-3xl rounded-full"></div>
