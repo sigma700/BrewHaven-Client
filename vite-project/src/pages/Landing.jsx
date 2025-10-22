@@ -10,27 +10,27 @@ import {FullMenu} from "./components/mobileMenu";
 
 const content = [
   {
-    url: "/src/assets/lekhashri-k-cTly5TvGnDU-unsplash.jpg",
+    url: "/lekhashri-k-cTly5TvGnDU-unsplash.jpg",
     desc: "Got into our first contract as the best coffee breweries in the nation led by Thomas Shelby the standing CEO at that moment of greatness for us!",
     cssPos: "col-span-4 row-span-2 lg:h-[400px] object-cover w-full",
   },
   {
-    url: "/src/assets/elin-melaas-ML_mP7oWLRk-unsplash.jpg",
+    url: "/elin-melaas-ML_mP7oWLRk-unsplash.jpg",
     desc: "Every sip has a story behind it and this is the main area of focus.",
     cssPos: "lg:row-start-3",
   },
   {
-    url: "/src/assets/anita-jankovic-gAnrjbnRcWM-unsplash.jpg",
+    url: "/anita-jankovic-gAnrjbnRcWM-unsplash.jpg",
     desc: "We don't disappoint as long as you become a loyal customer.",
     cssPos: "lg:row-start-3",
   },
   {
-    url: "/src/assets/brandon-leclaire-GrWScBV6yg4-unsplash.jpg",
+    url: "/brandon-leclaire-GrWScBV6yg4-unsplash.jpg",
     desc: "Believe in us and let us deliver",
     cssPos: "lg:row-start-3",
   },
   {
-    url: "/src/assets/pratik-prasad-JnVFfSwLWoc-unsplash.jpg",
+    url: "/pratik-prasad-JnVFfSwLWoc-unsplash.jpg",
     desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur, voluptatum commodi modi dolor incidunt, animi aut magnam unde a, ullam nam repellat qui. Dignissimos, amet inventore necessitatibus dolorum molestias eos!",
     cssPos: "lg:row-start-3",
   },
@@ -187,7 +187,7 @@ const Landing = () => {
             <div className="mt-8 lg:mt-0">
               <img
                 className="w-full hidden lg:block lg:max-h-[700px] rounded-2xl"
-                src="/src/assets/julia-florczak-Y6O6PHJRQms-unsplash-Photoroom.png"
+                src="/julia-florczak-Y6O6PHJRQms-unsplash-Photoroom.png"
                 alt="BrewHaven Coffee"
               />
             </div>
@@ -206,7 +206,7 @@ const Landing = () => {
         <div className="bg-white lg:flex lg:gap-[20px] items-center lg:mt-[20px] mt-[10px] lg:p-8 p-4">
           <img
             className="rounded-tl-[60%] rounded-tr-[40%] rounded-br-[30%] rounded-bl-[70%] w-full lg:w-[800px] lg:mt-[40px] mt-[20px]"
-            src="/src/assets/pexels-streetwindy-4079749.jpg"
+            src="/pexels-streetwindy-4079749.jpg"
             alt="About BrewHaven"
           />
           <p className="text-black font-light text-[20px] mt-[10px] text-center lg:m-0 lg:text-[25px] lg:text-left">
