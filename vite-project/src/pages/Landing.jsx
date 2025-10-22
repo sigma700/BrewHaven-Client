@@ -103,9 +103,9 @@ const Landing = () => {
 
   return (
     <main className="min-h-screen bg-cover bg-[url(/src/assets/alin-luna-lGl3spVIU0g-unsplash.jpg)] bg-fixed">
-      <div className="bg-white/95 backdrop-blur-sm rounded-b-[40%] lg:rounded-b-[30%] shadow-2xl">
-        <section className="p-6 lg:p-12 lg:flex flex-col lg:gap-32">
-          <nav className="flex justify-between items-center">
+      <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-amber-200/50 py-4">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="flex justify-between items-center">
             {/* Logo */}
             <p className="font-extrabold text-2xl lg:text-3xl text-amber-900">
               <a
@@ -118,13 +118,14 @@ const Landing = () => {
 
             {/* Navigation Links */}
             <ul className="hidden lg:flex gap-8">
-              {["Home", "About", "Products", "Blog", "Contacts"].map((item) => (
+              {["Home", "About", "Products", "Blog", "Contact"].map((item) => (
                 <li key={item}>
                   <a
                     href={`#${item.toLowerCase()}`}
-                    className="text-gray-700 hover:text-amber-800 font-medium transition-colors duration-200"
+                    className="text-gray-700 hover:text-amber-800 font-medium transition-colors duration-200 relative group"
                   >
                     {item}
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-800 transition-all duration-200 group-hover:w-full"></span>
                   </a>
                 </li>
               ))}
@@ -139,16 +140,22 @@ const Landing = () => {
                 SignUp
               </button>
             </div>
-          </nav>
+          </div>
+        </div>
+      </nav>
 
-          <button className="lg:hidden fixed top-6 right-6 z-50 p-2 bg-white rounded-full shadow-lg">
-            <div className="w-6 h-0.5 bg-gray-800 mb-1"></div>
-            <div className="w-6 h-0.5 bg-gray-800 mb-1"></div>
-            <div className="w-6 h-0.5 bg-gray-800"></div>
-          </button>
+      {/* Mobile Menu Button */}
+      <button className="lg:hidden fixed top-6 right-6 z-50 p-2 bg-white rounded-full shadow-lg border border-amber-200">
+        <div className="w-6 h-0.5 bg-gray-800 mb-1"></div>
+        <div className="w-6 h-0.5 bg-gray-800 mb-1"></div>
+        <div className="w-6 h-0.5 bg-gray-800"></div>
+      </button>
 
-          <section className="lg:flex justify-around">
-            <div className="mt-16 lg:mt-0 max-w-2xl">
+      {/* Hero Section */}
+      <div className="bg-white/95 backdrop-blur-sm rounded-b-[10%] md:rounded-b-[20%] lg:rounded-b-[30%] shadow-2xl">
+        <section className="p-6 lg:p-12 lg:flex flex-col lg:gap-32 pt-8">
+          <section className="lg:flex justify-around items-center">
+            <div className="mt-8 lg:mt-0 max-w-2xl">
               <h3 className="text-lg lg:text-xl text-amber-600 mb-4 font-semibold">
                 Life happens
                 <span className="text-amber-800 font-bold">
@@ -156,18 +163,15 @@ const Landing = () => {
                 </span>{" "}
                 coffee helps!
               </h3>
-
               <h1 className="text-4xl lg:text-6xl font-extrabold text-gray-900 mb-6 leading-tight">
                 Start your day fresh with our special offers
               </h1>
-
               <p className="text-lg lg:text-xl text-gray-600 mb-8 leading-relaxed">
                 Experience the perfect blend of rich aromas and exquisite
                 flavors. Our carefully sourced beans and artisanal roasting
                 process deliver a coffee experience that transforms your
                 everyday moments.
               </p>
-
               <div className="flex gap-4">
                 <a href="#about">
                   <button className="px-8 py-4 bg-amber-800 text-white font-bold rounded-full hover:bg-amber-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
@@ -181,11 +185,11 @@ const Landing = () => {
                 </a>
               </div>
             </div>
-            <div>
+            <div className="mt-8 lg:mt-0">
               <img
-                className="w-full lg:max-h-[700px] rounded-2xl"
+                className="w-full hidden lg:block lg:max-h-[700px] rounded-2xl"
                 src="/src/assets/julia-florczak-Y6O6PHJRQms-unsplash-Photoroom.png"
-                alt=""
+                alt="BrewHaven Coffee"
               />
             </div>
           </section>
@@ -273,7 +277,7 @@ const Landing = () => {
               Product added to cart successfully!
             </motion.div>
           )}
-          {/* TODO:IMPROVE THE UI OF THE SUCCESS AND ERROR MESSAGES */}
+
           {error && (
             <motion.div
               initial={{opacity: 0, y: -10}}
@@ -287,7 +291,6 @@ const Landing = () => {
           {/* Product Grid */}
           <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10">
             {products.map((product, index) => {
-              // Check if product is in cart and get its quantity Tto avoid adding null objects to the cart
               const cartItem = cart.find((item) => item.id === product.id);
               const quantity = cartItem ? cartItem.quantity : 0;
 
@@ -309,7 +312,6 @@ const Landing = () => {
                       {product.price}
                     </div>
 
-                    {/* Quantity Badge */}
                     {quantity > 0 && (
                       <div className="absolute top-5 left-5 bg-amber-900 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">
                         {quantity}
@@ -317,7 +319,6 @@ const Landing = () => {
                     )}
                   </div>
 
-                  {/* Product Details */}
                   <div className="p-6">
                     <h3 className="text-2xl font-bold text-amber-900 mb-2">
                       {product.name}
@@ -344,7 +345,6 @@ const Landing = () => {
                       )}
                     </div>
 
-                    {/* Quantity Controls */}
                     {quantity > 0 && (
                       <div className="flex items-center justify-center gap-3 mt-3">
                         <button
@@ -381,7 +381,6 @@ const Landing = () => {
               </button>
             </Link>
 
-            {/* clear cart button */}
             {cart.length > 0 && (
               <button
                 onClick={clearCart}
@@ -398,12 +397,12 @@ const Landing = () => {
       </section>
 
       {/* blogs section */}
-      <section className="bg-amber-100">
+      <section id="blog" className="bg-amber-100">
         <BlogGrid />
       </section>
 
       {/* contact us section */}
-      <section>
+      <section id="contact">
         <ContactForm />
       </section>
 
