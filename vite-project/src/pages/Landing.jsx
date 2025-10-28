@@ -7,6 +7,7 @@ import BlogGrid from "./components/blog";
 import ContactForm from "./components/contactForm";
 import Footer from "./components/footer";
 import {FullMenu} from "./components/mobileMenu";
+import {MdShoppingCartCheckout} from "react-icons/md";
 
 const content = [
   {
@@ -103,7 +104,7 @@ const Landing = () => {
   };
 
   return (
-    <main className="min-h-screen bg-cover bg-[url(/background-image.jpg)] bg-fixed">
+    <main className="min-h-screen bg-cover bg-gradient-to-bl from-stone-50 to-slate-300 bg-fixed">
       <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-amber-200/50 py-4">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="flex justify-between items-center">
@@ -200,7 +201,7 @@ const Landing = () => {
         id="about"
         className="bg-gradient-to-t from-amber-900/10 to-transparent rounded-t-[100%] text-black lg:p-[30px] pt-16"
       >
-        <h1 className="text-white font-extrabold text-center text-[30px] lg:text-[40px] mt-[20px]">
+        <h1 className="text-black font-extrabold text-center text-[30px] lg:text-[40px] mt-[20px]">
           About Us
         </h1>
         <div className="bg-white lg:flex lg:gap-[20px] items-center lg:mt-[20px] mt-[10px] lg:p-8 p-4">
@@ -329,7 +330,7 @@ const Landing = () => {
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleAddToCart(product.id)}
-                        className="flex-1 bg-amber-800 text-white py-3 rounded-full font-semibold transition-all duration-300 hover:bg-amber-700 hover:shadow-lg"
+                        className="flex-1 bg-amber-800 text-white py-3 rounded-full font-semibold transition-all duration-300 hover:bg-amber-700 hover:shadow-lg hover:cursor-pointer"
                       >
                         Add to Cart
                       </button>
@@ -373,10 +374,12 @@ const Landing = () => {
 
           {/* Cart Summary */}
           <div className="text-center mt-12">
-            <Link to="/cart">
-              <button className="text-white hover:bg-amber-100 hover:border-black hover:text-black hover:cursor-pointer hover:transition-colors hover:duration-[0.4s] duration-75 lg:p-4 px-6 rounded-2xl border bg-[#b57539] lg:text-2xl text-xl font-light">
-                View Cart: {getTotalItems()} items ($
-                {getTotalPrice().toFixed(2)})
+            <Link className="flex justify-center items-center" to="/cart">
+              <button className="text-white flex justify-center items-center gap-[10px] hover:bg-amber-700  hover:border-black hover:cursor-pointer hover:transition-colors hover:duration-[0.4s] duration-75 lg:p-4 px-6 rounded-2xl border bg-amber-800 lg:text-2xl text-xl font-light">
+                View Cart: {getTotalItems()}
+                <span>
+                  <MdShoppingCartCheckout />
+                </span>
               </button>
             </Link>
 

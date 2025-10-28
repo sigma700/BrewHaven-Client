@@ -1,6 +1,7 @@
 import React from "react";
 import {motion} from "framer-motion";
 import {Link} from "react-router-dom";
+import {FiFacebook, FiInstagram, FiLinkedin, FiTwitter} from "react-icons/fi";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -74,18 +75,38 @@ const Footer = () => {
               your daily moments of joy.
             </p>
             <div className="flex space-x-4">
-              {["Facebook", "Twitter", "Instagram", "LinkedIn"].map(
-                (social) => (
-                  <motion.a
-                    key={social}
-                    href="#"
-                    whileHover={{scale: 1.1, y: -2}}
-                    className="w-10 h-10 bg-amber-800/50 rounded-full flex items-center justify-center hover:bg-amber-700 transition-colors duration-300"
-                  >
-                    <span className="text-amber-100">{social[0]}</span>
-                  </motion.a>
-                )
-              )}
+              {[
+                {
+                  name: "Facebook",
+                  icon: <FiFacebook />,
+                  path: "#",
+                },
+                {
+                  name: "Twitter",
+                  icon: <FiTwitter />,
+                  path: "#",
+                },
+                {
+                  name: "Instagram",
+                  icon: <FiInstagram />,
+                  path: "#",
+                },
+                {
+                  name: "LinkedIn",
+                  icon: <FiLinkedin />,
+                  path: "#",
+                },
+              ].map((social, index) => (
+                <motion.a
+                  target="blank"
+                  key={index}
+                  href={social.path}
+                  whileHover={{scale: 1.1, y: -2}}
+                  className="w-10 h-10 bg-amber-800/50 rounded-full flex items-center justify-center hover:cursor-pointer hover:bg-amber-700 transition-colors duration-300"
+                >
+                  {social.icon}
+                </motion.a>
+              ))}
             </div>
           </motion.div>
 

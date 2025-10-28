@@ -179,7 +179,7 @@ const ContactForm = () => {
                   type="submit"
                   whileHover={{scale: 1.02}}
                   whileTap={{scale: 0.98}}
-                  className="w-full bg-amber-800 text-white py-4 rounded-2xl font-bold text-lg shadow-lg hover:bg-amber-700 transition-colors duration-300"
+                  className="w-full bg-amber-800 text-white py-4 rounded-2xl font-bold text-lg shadow-lg hover:bg-amber-700 transition-colors duration-300 hover:cursor-pointer"
                 >
                   Send Message
                 </motion.button>
