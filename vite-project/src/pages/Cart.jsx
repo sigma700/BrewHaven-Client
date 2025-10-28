@@ -28,7 +28,7 @@ const Cart = () => {
             <div className="bg-white rounded-3xl shadow-lg p-12 max-w-2xl mx-auto">
               <div className="flex justify-center">
                 <img
-                  src="/shopping-cart.svg"
+                  src="/shopping-cart (1).svg"
                   className="text-6xl mb-4 lg:w-[300px] w-[100px]"
                 />
               </div>

@@ -48,7 +48,7 @@ export const products = [
     name: "White Coffee",
     price: "$19.99",
     description: "Strong and bold with earthy tones",
-    image: "/khanh-nguyen-jaChzCAVaTU-unsplash.jpg",
+    image: "/white-coffee.jpg",
     id: 2,
   },
   {
@@ -62,14 +62,14 @@ export const products = [
     name: "The Good Life",
     price: "$26.99",
     description: "Well-balanced with caramel sweetness",
-    image: "/sara-dubler-2u7KhYAl24A-unsplash.jpg",
+    image: "/goodlife-coffee.jpg",
     id: 4,
   },
   {
-    name: "Craffty Common",
+    name: "Happy Coffee",
     price: "$22.99",
     description: "Nutty and smooth with low acidity",
-    image: "/tyler-d0ZOLC5ptNY-unsplash.jpg",
+    image: "/happy-coffee.jpg",
     id: 5,
   },
 ];
@@ -103,7 +103,7 @@ const Landing = () => {
   };
 
   return (
-    <main className="min-h-screen bg-cover bg-[url(/src/assets/alin-luna-lGl3spVIU0g-unsplash.jpg)] bg-fixed">
+    <main className="min-h-screen bg-cover bg-[url(/background-image.jpg)] bg-fixed">
       <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-amber-200/50 py-4">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="flex justify-between items-center">
@@ -186,8 +186,8 @@ const Landing = () => {
             </div>
             <div className="mt-8 lg:mt-0">
               <img
-                className="w-full hidden lg:block lg:max-h-[700px] rounded-2xl"
-                src="/julia-florczak-Y6O6PHJRQms-unsplash-Photoroom.png"
+                className="w-full hidden lg:block lg:max-h-[700px] rounded-[50%]"
+                src="/hero-image.png"
                 alt="BrewHaven Coffee"
               />
             </div>
@@ -375,7 +375,7 @@ const Landing = () => {
           <div className="text-center mt-12">
             <Link to="/cart">
               <button className="text-white hover:bg-amber-100 hover:border-black hover:text-black hover:cursor-pointer hover:transition-colors hover:duration-[0.4s] duration-75 lg:p-4 px-6 rounded-2xl border bg-[#b57539] lg:text-2xl text-xl font-light">
-                Your Cart: {getTotalItems()} items ($
+                View Cart: {getTotalItems()} items ($
                 {getTotalPrice().toFixed(2)})
               </button>
             </Link>
