@@ -1,6 +1,7 @@
 import React from "react";
 import {useBasket} from "../store/stateFiles";
 import {motion} from "framer-motion";
+import {TbTruckDelivery} from "react-icons/tb";
 
 const Cart = () => {
   const {
@@ -207,7 +208,9 @@ const Cart = () => {
                 {/* Additional Info about the product*/}
                 <div className="mt-6 p-4 bg-amber-50 rounded-xl">
                   <div className="flex items-center gap-3 text-amber-700 mb-2">
-                    <span>🚚</span>
+                    <span>
+                      <TbTruckDelivery />
+                    </span>
                     <span className="font-semibold">Free Shipping</span>
                   </div>
                   <p className="text-sm text-amber-600">

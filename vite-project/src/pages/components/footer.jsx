@@ -2,6 +2,9 @@ import React from "react";
 import {motion} from "framer-motion";
 import {Link} from "react-router-dom";
 import {FiFacebook, FiInstagram, FiLinkedin, FiTwitter} from "react-icons/fi";
+import {FaLocationDot} from "react-icons/fa6";
+
+import {CiHeadphones, CiMail} from "react-icons/ci";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -176,19 +179,25 @@ const Footer = () => {
             <div className="space-y-4">
               <div className="flex items-start space-x-3">
                 <div className="w-6 h-6 bg-amber-700 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                  <span className="text-xs">📍</span>
+                  <span className="text-xs">
+                    <FaLocationDot />
+                  </span>
                 </div>
                 <p className="text-amber-200/80">72 W 38th St, New York</p>
               </div>
               <div className="flex items-center space-x-3">
                 <div className="w-6 h-6 bg-amber-700 rounded-full flex items-center justify-center flex-shrink-0">
-                  <span className="text-xs">📞</span>
+                  <span className="text-xs">
+                    <CiHeadphones />
+                  </span>
                 </div>
                 <p className="text-amber-200/80">+1 (555) 123-BREW</p>
               </div>
               <div className="flex items-center space-x-3">
                 <div className="w-6 h-6 bg-amber-700 rounded-full flex items-center justify-center flex-shrink-0">
-                  <span className="text-xs">📧</span>
+                  <span className="text-xs">
+                    <CiMail />
+                  </span>
                 </div>
                 <p className="text-amber-200/80">business@brewhaven.com</p>
               </div>
