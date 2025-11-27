@@ -2,6 +2,7 @@ import React from "react";
 import {useBasket} from "../store/stateFiles";
 import {motion} from "framer-motion";
 import {TbTruckDelivery} from "react-icons/tb";
+import {Link} from "react-router-dom";
 
 const Cart = () => {
   const {
@@ -193,10 +194,11 @@ const Cart = () => {
                     <span>${(getTotalPrice() * 1.1).toFixed(2)}</span>
                   </div>
                 </div>
-
-                <button className="w-full bg-amber-800 text-white py-4 rounded-full font-semibold hover:bg-amber-700 transition-colors duration-300 shadow-lg hover:shadow-xl mb-4">
-                  Proceed to Checkout
-                </button>
+                <Link to="/checkout">
+                  <button className="w-full hover:cursor-pointer bg-amber-800 text-white py-4 rounded-full font-semibold hover:bg-amber-700 transition-colors duration-300 shadow-lg hover:shadow-xl mb-4">
+                    Proceed to Checkout
+                  </button>
+                </Link>
 
                 <a
                   href="/#products"
