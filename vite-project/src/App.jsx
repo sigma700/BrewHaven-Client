@@ -3,6 +3,7 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import Landing from "./pages/Landing";
 import Cart from "./pages/Cart";
 import BlogPost from "./pages/IndivBlog";
+import Checkout from "./pages/checkOut";
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
   {
     path: "/blog/:id",
     element: <BlogPost />,
+  },
+  {
+    path: "/checkOut",
+    element: <Checkout />,
   },
 ]);
 
