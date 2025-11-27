@@ -160,7 +160,7 @@ const BlogGrid = () => {
             Coffee Chronicles
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Discover fascinating stories from the world of coffee — from market
+            Discover fascinating stories from the world of coffee from market
             insights to historical tales.
           </p>
         </motion.div>
