@@ -1,417 +1,736 @@
-import React from "react";
-import {motion} from "framer-motion";
-import {useBasket} from "../store/stateFiles";
-import {Link} from "react-router-dom";
-import BlogPost from "./components/blog";
+import React, { useState, useEffect, useRef } from "react";
+import { motion, useScroll, useTransform, AnimatePresence, useSpring } from "framer-motion";
+import { useBasket } from "../store/stateFiles";
+import { Link } from "react-router-dom";
 import BlogGrid from "./components/blog";
 import ContactForm from "./components/contactForm";
 import Footer from "./components/footer";
-import {FullMenu} from "./components/mobileMenu";
-import {MdShoppingCartCheckout} from "react-icons/md";
+import { FullMenu } from "./components/mobileMenu";
+import { MdShoppingCartCheckout } from "react-icons/md";
 
+/* ── GLOBAL STYLES injected once ───────────────────────────── */
+const GlobalStyles = () => (
+  <style>{`
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap');
+
+    :root {
+      --espresso:   #1C0A00;
+      --roast:      #3B1A08;
+      --caramel:    #C17D3C;
+      --cream:      #F5EDD8;
+      --fog:        #EDE5D5;
+      --bone:       #FAF6EF;
+      --ink:        #0E0601;
+      --mist:       rgba(245,237,216,0.06);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bone);
+      color: var(--espresso);
+      font-family: 'Outfit', sans-serif;
+      overflow-x: hidden;
+    }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--cream); }
+    ::-webkit-scrollbar-thumb { background: var(--caramel); border-radius: 2px; }
+
+    .serif { font-family: 'Cormorant Garamond', serif; }
+
+    /* Grain overlay */
+    .grain::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.022;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 128px;
+    }
+
+    /* Nav link underline */
+    .nav-link {
+      position: relative;
+      color: var(--espresso);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0;
+      width: 0; height: 1px;
+      background: var(--caramel);
+      transition: width 0.35s ease;
+    }
+    .nav-link:hover { color: var(--caramel); }
+    .nav-link:hover::after { width: 100%; }
+
+    /* Product card */
+    .product-card {
+      position: relative;
+      background: #fff;
+      border: 1px solid rgba(193,125,60,0.12);
+      border-radius: 24px;
+      overflow: hidden;
+      transition: box-shadow 0.4s ease, transform 0.4s ease;
+    }
+    .product-card:hover {
+      box-shadow: 0 32px 80px rgba(28,10,0,0.14);
+      transform: translateY(-6px);
+    }
+    .product-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(193,125,60,0.04), transparent 60%);
+      opacity: 0;
+      transition: opacity 0.4s;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .product-card:hover::before { opacity: 1; }
+
+    /* History card */
+    .history-card { position: relative; overflow: hidden; border-radius: 16px; }
+    .history-card .overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(28,10,0,0.88) 0%, transparent 55%);
+      opacity: 0; transition: opacity 0.45s ease;
+    }
+    .history-card:hover .overlay { opacity: 1; }
+    .history-card .card-text {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 20px;
+      transform: translateY(16px); opacity: 0;
+      transition: all 0.45s ease 0.05s;
+    }
+    .history-card:hover .card-text { transform: translateY(0); opacity: 1; }
+
+    /* Shimmer button */
+    .btn-primary {
+      position: relative; overflow: hidden;
+      background: var(--espresso);
+      color: var(--cream);
+      border: none; cursor: pointer;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      padding: 16px 36px;
+      border-radius: 60px;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+    .btn-primary::after {
+      content: '';
+      position: absolute; top: 0; left: -100%;
+      width: 55%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(245,237,216,0.1), transparent);
+      transform: skewX(-20deg);
+      transition: left 0.55s ease;
+    }
+    .btn-primary:hover { background: var(--roast); box-shadow: 0 12px 40px rgba(28,10,0,0.3); }
+    .btn-primary:hover::after { left: 150%; }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--espresso);
+      border: 1.5px solid rgba(28,10,0,0.3);
+      cursor: pointer;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      padding: 15px 36px;
+      border-radius: 60px;
+      transition: all 0.3s ease;
+    }
+    .btn-outline:hover {
+      background: var(--espresso);
+      color: var(--cream);
+      border-color: var(--espresso);
+    }
+
+    /* Divider line */
+    .rule {
+      width: 48px; height: 1px;
+      background: var(--caramel);
+      display: inline-block;
+    }
+
+    /* Section label */
+    .section-label {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--caramel);
+    }
+  `}</style>
+);
+
+/* ── SCROLL PROGRESS BAR ────────────────────────────────────── */
+function ScrollBar() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
+  return (
+    <motion.div
+      style={{
+        scaleX,
+        position: "fixed", top: 0, left: 0, right: 0,
+        height: "2px",
+        background: "linear-gradient(90deg, #C17D3C, #3B1A08)",
+        transformOrigin: "0%",
+        zIndex: 99999,
+      }}
+    />
+  );
+}
+
+/* ── DATA ───────────────────────────────────────────────────── */
 const content = [
-  {
-    url: "/lekhashri-k-cTly5TvGnDU-unsplash.jpg",
-    desc: "Got into our first contract as the best coffee breweries in the nation led by Thomas Shelby the standing CEO at that moment of greatness for us!",
-    cssPos: "col-span-4 row-span-2 lg:h-[400px] object-cover w-full",
-  },
-  {
-    url: "/elin-melaas-ML_mP7oWLRk-unsplash.jpg",
-    desc: "Every sip has a story behind it and this is the main area of focus.",
-    cssPos: "lg:row-start-3",
-  },
-  {
-    url: "/anita-jankovic-gAnrjbnRcWM-unsplash.jpg",
-    desc: "We don't disappoint as long as you become a loyal customer.",
-    cssPos: "lg:row-start-3",
-  },
-  {
-    url: "/brandon-leclaire-GrWScBV6yg4-unsplash.jpg",
-    desc: "Believe in us and let us deliver",
-    cssPos: "lg:row-start-3",
-  },
-  {
-    url: "/pratik-prasad-JnVFfSwLWoc-unsplash.jpg",
-    desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur, voluptatum commodi modi dolor incidunt, animi aut magnam unde a, ullam nam repellat qui. Dignissimos, amet inventore necessitatibus dolorum molestias eos!",
-    cssPos: "lg:row-start-3",
-  },
+  { url: "/lekhashri-k-cTly5TvGnDU-unsplash.jpg", desc: "Our very first contract — the moment BrewHaven became more than a dream.", year: "2018" },
+  { url: "/elin-melaas-ML_mP7oWLRk-unsplash.jpg", desc: "Every sip carries a story. This has always been our north star.", year: "2019" },
+  { url: "/anita-jankovic-gAnrjbnRcWM-unsplash.jpg", desc: "We built loyalty one cup at a time. We never stopped.", year: "2020" },
+  { url: "/brandon-leclaire-GrWScBV6yg4-unsplash.jpg", desc: "Expansion across three new cities. Trust delivered.", year: "2021" },
+  { url: "/pratik-prasad-JnVFfSwLWoc-unsplash.jpg", desc: "Recognised nationally. The work speaks for itself.", year: "2023" },
 ];
 
 export const products = [
-  {
-    name: "Jumping Bean",
-    price: "$24.99",
-    description: "Rich and smooth with chocolate notes",
-    image: "/erik-mclean-FL3NmWxw0ok-unsplash.jpg",
-    id: 1,
-  },
-  {
-    name: "White Coffee",
-    price: "$19.99",
-    description: "Strong and bold with earthy tones",
-    image: "/white-coffee.jpg",
-    id: 2,
-  },
-  {
-    name: "Feeling 18",
-    price: "$29.99",
-    description: "Floral and citrusy with bright acidity",
-    image: "/lisanto-J73tNVo5oZM-unsplash.jpg",
-    id: 3,
-  },
-  {
-    name: "The Good Life",
-    price: "$26.99",
-    description: "Well-balanced with caramel sweetness",
-    image: "/goodlife-coffee.jpg",
-    id: 4,
-  },
-  {
-    name: "Happy Coffee",
-    price: "$22.99",
-    description: "Nutty and smooth with low acidity",
-    image: "/happy-coffee.jpg",
-    id: 5,
-  },
+  { name: "Jumping Bean", price: "$24.99", description: "Rich and smooth with deep chocolate notes", image: "/erik-mclean-FL3NmWxw0ok-unsplash.jpg", id: 1, origin: "Colombia" },
+  { name: "White Coffee", price: "$19.99", description: "Strong and bold with warm earthy tones", image: "/white-coffee.jpg", id: 2, origin: "Ethiopia" },
+  { name: "Feeling 18", price: "$29.99", description: "Floral and citrusy with bright acidity", image: "/lisanto-J73tNVo5oZM-unsplash.jpg", id: 3, origin: "Kenya" },
+  { name: "The Good Life", price: "$26.99", description: "Well-balanced with hints of caramel sweetness", image: "/goodlife-coffee.jpg", id: 4, origin: "Brazil" },
+  { name: "Happy Coffee", price: "$22.99", description: "Nutty and smooth with a clean low-acid finish", image: "/happy-coffee.jpg", id: 5, origin: "Guatemala" },
 ];
 
+/* ── STAT STRIP ─────────────────────────────────────────────── */
+const stats = [
+  { value: "12+", label: "Years Roasting" },
+  { value: "5", label: "Premium Blends" },
+  { value: "40K+", label: "Happy Customers" },
+  { value: "100%", label: "Ethically Sourced" },
+];
+
+/* ══════════════════════════════════════════════════════════════
+   MAIN COMPONENT
+══════════════════════════════════════════════════════════════ */
 const Landing = () => {
+  const [navScrolled, setNavScrolled] = useState(false);
+  const heroRef = useRef(null);
+  const { scrollYProgress: heroProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const heroImgY = useTransform(heroProgress, [0, 1], [0, 80]);
+  const heroOpacity = useTransform(heroProgress, [0, 0.7], [1, 0]);
+
   const {
-    addToCart,
-    removeFromCart,
-    updateCart,
-    updateQuantity,
-    cart,
-    getTotalItems,
-    getTotalPrice,
-    success,
-    error,
-    clearCart,
+    addToCart, removeFromCart, updateQuantity,
+    cart, getTotalItems, success, error, clearCart,
   } = useBasket();
 
-  const handleAddToCart = (productId) => {
-    addToCart(productId);
+  useEffect(() => {
+    const onScroll = () => setNavScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
-    // Optional: Show success message
-    if (success) {
-      console.log("Product added to cart!");
-    }
-
-    // Optional: Show error message
-    if (error) {
-      console.error(error);
-    }
-  };
+  const handleAddToCart = (id) => addToCart(id);
 
   return (
-    <main className="min-h-screen bg-cover bg-gradient-to-bl from-stone-50 to-slate-300 bg-fixed">
-      <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-amber-200/50 py-4">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="flex justify-between items-center">
-            {/* Logo */}
-            <p className="font-extrabold text-2xl lg:text-3xl text-amber-900">
-              <a
-                href="#home"
-                className="hover:text-amber-700 transition-colors"
-              >
-                BrewHaven
-              </a>
-            </p>
+    <main className="grain" style={{ minHeight: "100vh", background: "var(--bone)" }}>
+      <GlobalStyles />
+      <ScrollBar />
 
-            {/* Navigation Links */}
-            <ul className="hidden lg:flex gap-8">
-              {["Home", "About", "Products", "Blog", "Contact"].map((item) => (
-                <li key={item}>
-                  <a
-                    href={`#${item.toLowerCase()}`}
-                    className="text-gray-700 hover:text-amber-800 font-medium transition-colors duration-200 relative group"
-                  >
-                    {item}
-                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-800 transition-all duration-200 group-hover:w-full"></span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-
-            {/* Auth Buttons */}
-            <div className="flex gap-3">
-              <button className="px-6 py-2 border-2 border-amber-800 text-amber-800 font-bold rounded-full hover:bg-amber-800 hover:text-white transition-all duration-200">
-                Login
-              </button>
-              <button className="px-6 py-2 bg-amber-800 text-white font-bold rounded-full hover:bg-amber-700 transition-all duration-200 shadow-lg">
-                SignUp
-              </button>
+      {/* ══ NAVIGATION ══════════════════════════════════════════ */}
+      <nav
+        style={{
+          position: "sticky", top: 0, zIndex: 1000,
+          padding: navScrolled ? "14px 0" : "20px 0",
+          background: navScrolled ? "rgba(250,246,239,0.92)" : "transparent",
+          backdropFilter: navScrolled ? "blur(18px)" : "none",
+          borderBottom: navScrolled ? "1px solid rgba(193,125,60,0.15)" : "none",
+          transition: "all 0.4s ease",
+          boxShadow: navScrolled ? "0 4px 30px rgba(28,10,0,0.06)" : "none",
+        }}
+      >
+        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 32px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          {/* Logo */}
+          <motion.a href="#home" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}
+            style={{ textDecoration: "none" }}>
+            <div style={{ display: "flex", flexDirection: "column", lineHeight: 1 }}>
+              <span className="serif" style={{ fontSize: "1.8rem", fontWeight: 700, color: "var(--espresso)", letterSpacing: "-0.02em" }}>BrewHaven</span>
+              <span style={{ fontSize: "0.55rem", letterSpacing: "0.35em", color: "var(--caramel)", textTransform: "uppercase", fontWeight: 600, marginTop: 1 }}>Artisan Coffee Co.</span>
             </div>
-          </div>
+          </motion.a>
+
+          {/* Desktop links */}
+          <motion.ul initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}
+            style={{ display: "flex", gap: 40, listStyle: "none", alignItems: "center" }}
+            className="hidden-mobile">
+            {["Home", "About", "Products", "Blog", "Contact"].map((item, i) => (
+              <li key={item}>
+                <motion.a href={`#${item.toLowerCase()}`} className="nav-link"
+                  initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 * i + 0.3 }}>
+                  {item}
+                </motion.a>
+              </li>
+            ))}
+          </motion.ul>
+
+          {/* Buttons */}
+          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 }}
+            style={{ display: "flex", gap: 12, alignItems: "center" }}>
+            <button className="btn-outline hidden-mobile" style={{ padding: "10px 24px", fontSize: "0.72rem" }}>Login</button>
+            <button className="btn-primary" style={{ padding: "10px 24px", fontSize: "0.72rem" }}>Sign Up</button>
+            <Link to="/cart" style={{ textDecoration: "none" }}>
+              <button style={{
+                background: "transparent", border: "1.5px solid rgba(28,10,0,0.15)",
+                borderRadius: 60, padding: "9px 16px", cursor: "pointer",
+                display: "flex", alignItems: "center", gap: 6,
+                fontSize: "0.8rem", color: "var(--espresso)", fontFamily: "'Outfit', sans-serif",
+                transition: "all 0.3s ease",
+              }}>
+                <MdShoppingCartCheckout size={16} />
+                <span style={{ fontWeight: 600, minWidth: 12 }}>{getTotalItems()}</span>
+              </button>
+            </Link>
+          </motion.div>
         </div>
       </nav>
 
-      {/* Mobile Menu Button */}
-      <div className="lg:hidden fixed top-6 right-6 z-50 p-2 bg-white rounded-full shadow-lg border border-amber-200">
-        <FullMenu />
-      </div>
-
-      {/* Hero Section */}
-      <div className="bg-white/95 backdrop-blur-sm rounded-b-[10%] md:rounded-b-[20%] lg:rounded-b-[30%] shadow-2xl">
-        <section className="p-6 lg:p-12 lg:flex flex-col lg:gap-32 pt-8">
-          <section className="lg:flex justify-around items-center">
-            <div className="mt-8 lg:mt-0 max-w-2xl">
-              <h3 className="text-lg lg:text-xl text-amber-600 mb-4 font-semibold">
-                Life happens
-                <span className="text-amber-800 font-bold">
-                  BrewHaven's
-                </span>{" "}
-                coffee helps!
-              </h3>
-              <h1 className="text-4xl lg:text-6xl font-extrabold text-gray-900 mb-6 leading-tight">
-                Start your day fresh with our special offers
-              </h1>
-              <p className="text-lg lg:text-xl text-gray-600 mb-8 leading-relaxed">
-                Experience the perfect blend of rich aromas and exquisite
-                flavors. Our carefully sourced beans and artisanal roasting
-                process deliver a coffee experience that transforms your
-                everyday moments.
-              </p>
-              <div className="flex gap-4">
-                <a href="#about">
-                  <button className="px-8 py-4 bg-amber-800 text-white font-bold rounded-full hover:bg-amber-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-                    Discover More
-                  </button>
-                </a>
-                <a href="#products">
-                  <button className="px-8 py-4 border-2 border-amber-800 text-amber-800 font-bold rounded-full hover:bg-amber-50 transition-all duration-300">
-                    View Menu
-                  </button>
-                </a>
-              </div>
-            </div>
-            <div className="mt-8 lg:mt-0">
-              <img
-                className="w-full hidden lg:block lg:max-h-[700px] rounded-[50%]"
-                src="/hero-image.png"
-                alt="BrewHaven Coffee"
-              />
-            </div>
-          </section>
-        </section>
-      </div>
-
-      {/* About us section */}
-      <div
-        id="about"
-        className="bg-gradient-to-t from-amber-900/10 to-transparent rounded-t-[100%] text-black lg:p-[30px] pt-16"
-      >
-        <h1 className="text-black font-extrabold text-center text-[30px] lg:text-[40px] mt-[20px]">
-          About Us
-        </h1>
-        <div className="bg-white lg:flex lg:gap-[20px] items-center lg:mt-[20px] mt-[10px] lg:p-8 p-4">
-          <img
-            className="rounded-tl-[60%] rounded-tr-[40%] rounded-br-[30%] rounded-bl-[70%] w-full lg:w-[800px] lg:mt-[40px] mt-[20px]"
-            src="/pexels-streetwindy-4079749.jpg"
-            alt="About BrewHaven"
-          />
-          <p className="text-black font-light text-[20px] mt-[10px] text-center lg:m-0 lg:text-[25px] lg:text-left">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam
-            ratione eaque molestias dignissimos fugit, doloremque reiciendis,
-            cupiditate, illum corporis voluptate voluptatum. Reprehenderit
-            placeat repellat vitae doloremque corrupti id aliquid aspernatur!
-          </p>
+      {/* Mobile menu */}
+      <div style={{ position: "fixed", bottom: 24, right: 24, zIndex: 999 }}
+        className="show-mobile">
+        <div style={{
+          background: "var(--espresso)", borderRadius: "50%", width: 52, height: 52,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          boxShadow: "0 8px 30px rgba(28,10,0,0.35)",
+        }}>
+          <FullMenu />
         </div>
+      </div>
 
-        {/* history section */}
-        <div className="bg-white lg:p-8 p-4">
-          <h3 className="text-[30px] font-bold text-amber-900 text-center lg:text-left">
-            Brief History
-          </h3>
-          <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-4 mt-6">
-            {content.map((item, index) => (
-              <div
-                key={index}
-                className={`${item.cssPos} lg:h-[500px] w-full relative overflow-hidden group border-white border-[3px] rounded-lg`}
-              >
-                <img
-                  className="w-full h-full group-hover:opacity-[0.9] object-cover transition-transform duration-500 group-hover:scale-110"
-                  src={item.url}
-                  alt=""
-                />
-                <div className="absolute inset-0 bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-500 flex items-center justify-center p-6">
-                  <p className="text-white text-center transform translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-100 lg:text-[16px] font-bold">
-                    {item.desc}
-                  </p>
-                </div>
-              </div>
-            ))}
+      <style>{`
+        .hidden-mobile { display: flex !important; }
+        .show-mobile   { display: none !important; }
+        @media (max-width: 1024px) {
+          .hidden-mobile { display: none !important; }
+          .show-mobile   { display: block !important; }
+        }
+      `}</style>
+
+      {/* ══ HERO ════════════════════════════════════════════════ */}
+      <section id="home" ref={heroRef}
+        style={{
+          minHeight: "100vh",
+          background: "linear-gradient(160deg, var(--bone) 0%, #EDE0CC 55%, #D9C9A8 100%)",
+          display: "flex", alignItems: "center",
+          position: "relative", overflow: "hidden",
+          padding: "0 32px",
+        }}>
+
+        {/* Decorative circles */}
+        <div style={{ position: "absolute", top: "8%", right: "5%", width: 480, height: 480, borderRadius: "50%", background: "rgba(193,125,60,0.07)", filter: "blur(60px)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", bottom: "10%", left: "-5%", width: 320, height: 320, borderRadius: "50%", background: "rgba(59,26,8,0.06)", filter: "blur(80px)", pointerEvents: "none" }} />
+
+        {/* Faint grid pattern */}
+        <div style={{
+          position: "absolute", inset: 0, pointerEvents: "none",
+          backgroundImage: "radial-gradient(rgba(28,10,0,0.045) 1px, transparent 1px)",
+          backgroundSize: "28px 28px",
+        }} />
+
+        <motion.div style={{ opacity: heroOpacity, maxWidth: 1280, margin: "0 auto", width: "100%", display: "flex", alignItems: "center", gap: 64, paddingTop: 60 }}>
+
+          {/* Text column */}
+          <div style={{ flex: 1, maxWidth: 620 }}>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}
+              style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 28 }}>
+              <span className="rule" />
+              <span className="section-label">Est. 2012 · Artisan Roasters</span>
+            </motion.div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+              className="serif"
+              style={{ fontSize: "clamp(3rem, 6vw, 5.5rem)", fontWeight: 600, lineHeight: 1.05, color: "var(--espresso)", marginBottom: 28, letterSpacing: "-0.02em" }}>
+              Every Cup<br />
+              <em style={{ color: "var(--caramel)", fontStyle: "italic" }}>Tells a Story</em>
+            </motion.h1>
+
+            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.7 }}
+              style={{ fontSize: "1.1rem", lineHeight: 1.8, color: "rgba(28,10,0,0.6)", maxWidth: 480, marginBottom: 44, fontWeight: 300 }}>
+              Sourced from the world's finest farms. Roasted with obsessive care. Delivered to your door so every morning begins with something worth waking up for.
+            </motion.p>
+
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }}
+              style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 64 }}>
+              <a href="#about" style={{ textDecoration: "none" }}>
+                <button className="btn-primary">Discover Our Story</button>
+              </a>
+              <a href="#products" style={{ textDecoration: "none" }}>
+                <button className="btn-outline">Explore Menu</button>
+              </a>
+            </motion.div>
+
+            {/* Stats strip */}
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }}
+              style={{ display: "flex", gap: 40, flexWrap: "wrap" }}>
+              {stats.map((s, i) => (
+                <motion.div key={s.label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7 + i * 0.08 }}>
+                  <div className="serif" style={{ fontSize: "2rem", fontWeight: 600, color: "var(--espresso)", lineHeight: 1 }}>{s.value}</div>
+                  <div style={{ fontSize: "0.7rem", letterSpacing: "0.12em", color: "var(--caramel)", textTransform: "uppercase", fontWeight: 600, marginTop: 4 }}>{s.label}</div>
+                </motion.div>
+              ))}
+            </motion.div>
           </div>
-        </div>
-      </div>
 
-      {/* products section */}
-      <section
-        id="products"
-        className="relative bg-gradient-to-b from-amber-50 via-white to-amber-50 py-20 lg:py-28 overflow-hidden"
-      >
-        <div className="container mx-auto px-6 lg:px-12">
-          {/* Title + Subtitle */}
-          <motion.div
-            initial={{opacity: 0, y: 30}}
-            whileInView={{opacity: 1, y: 0}}
-            transition={{duration: 0.8, ease: "easeOut"}}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl lg:text-5xl font-extrabold text-amber-900 tracking-tight drop-shadow-sm">
-              Our Products
-            </h2>
-            <p className="text-lg lg:text-xl text-gray-600 mt-4 max-w-2xl mx-auto">
-              Discover our premium selection of carefully sourced and roasted
-              coffee beans.
+          {/* Image column */}
+          <motion.div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center", y: heroImgY }}
+            initial={{ opacity: 0, scale: 0.88 }} animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+            className="hidden-mobile">
+            <div style={{ position: "relative" }}>
+              {/* Decorative ring */}
+              <div style={{
+                position: "absolute", inset: -16, borderRadius: "50%",
+                border: "1px solid rgba(193,125,60,0.2)",
+                animation: "spin 18s linear infinite",
+              }} />
+              <div style={{
+                position: "absolute", inset: -32, borderRadius: "50%",
+                border: "1px dashed rgba(193,125,60,0.1)",
+                animation: "spin 28s linear infinite reverse",
+              }} />
+              <style>{`@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }`}</style>
+              <img src="/hero-image.png" alt="BrewHaven Coffee" style={{
+                width: "clamp(320px, 40vw, 520px)",
+                borderRadius: "50%",
+                objectFit: "cover",
+                boxShadow: "0 40px 120px rgba(28,10,0,0.2), 0 0 0 2px rgba(193,125,60,0.15)",
+              }} />
+            </div>
+          </motion.div>
+        </motion.div>
+
+        {/* Scroll indicator */}
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.4 }}
+          style={{ position: "absolute", bottom: 32, left: "50%", transform: "translateX(-50%)", display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+          <span style={{ fontSize: "0.6rem", letterSpacing: "0.25em", color: "rgba(28,10,0,0.35)", textTransform: "uppercase" }}>Scroll</span>
+          <motion.div animate={{ y: [0, 9, 0] }} transition={{ duration: 1.6, repeat: Infinity }}
+            style={{ width: 1, height: 44, background: "linear-gradient(to bottom, var(--caramel), transparent)" }} />
+        </motion.div>
+      </section>
+
+      {/* ══ ABOUT ════════════════════════════════════════════════ */}
+      <section id="about" style={{ background: "var(--bone)", padding: "120px 32px" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+
+          {/* Header */}
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }} viewport={{ once: true }}
+            style={{ marginBottom: 80 }}>
+            <span className="section-label">Who We Are</span>
+            <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginTop: 16, flexWrap: "wrap", gap: 24 }}>
+              <h2 className="serif" style={{ fontSize: "clamp(2.5rem, 5vw, 4.5rem)", fontWeight: 600, color: "var(--espresso)", lineHeight: 1.06, letterSpacing: "-0.02em", maxWidth: 560 }}>
+                Rooted in passion,<br /><em style={{ color: "var(--caramel)" }}>brewed with purpose</em>
+              </h2>
+              <p style={{ maxWidth: 380, fontSize: "1rem", lineHeight: 1.85, color: "rgba(28,10,0,0.55)", fontWeight: 300 }}>
+                BrewHaven was born from a simple belief: that coffee should be more than a beverage. It should be a ritual, a conversation, a moment of presence in a rushing world.
+              </p>
+            </div>
+          </motion.div>
+
+          {/* Image + Text split */}
+          <div style={{ display: "flex", gap: 64, alignItems: "center", flexWrap: "wrap", marginBottom: 100 }}>
+            <motion.div initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }} viewport={{ once: true }}
+              style={{ flex: "1 1 460px", position: "relative" }}>
+              <img src="/pexels-streetwindy-4079749.jpg" alt="About BrewHaven" style={{
+                width: "100%", height: 520, objectFit: "cover",
+                borderRadius: "48% 40% 36% 52% / 42% 48% 36% 44%",
+                boxShadow: "0 32px 80px rgba(28,10,0,0.15)",
+              }} />
+              {/* Floating badge */}
+              <motion.div initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.4 }} viewport={{ once: true }}
+                style={{
+                  position: "absolute", bottom: 32, right: -16,
+                  background: "var(--espresso)", color: "var(--cream)",
+                  borderRadius: 20, padding: "20px 28px",
+                  boxShadow: "0 16px 50px rgba(28,10,0,0.3)",
+                }}>
+                <div className="serif" style={{ fontSize: "2.2rem", fontWeight: 700, lineHeight: 1 }}>12+</div>
+                <div style={{ fontSize: "0.7rem", letterSpacing: "0.15em", textTransform: "uppercase", marginTop: 4, color: "var(--caramel)" }}>Years of Craft</div>
+              </motion.div>
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }} viewport={{ once: true }}
+              style={{ flex: "1 1 380px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
+                <span className="rule" />
+                <span className="section-label">Our Philosophy</span>
+              </div>
+              <p className="serif" style={{ fontSize: "1.55rem", fontWeight: 400, lineHeight: 1.6, color: "var(--espresso)", marginBottom: 24, letterSpacing: "-0.01em" }}>
+                "We believe the best coffee is grown with respect, roasted with patience, and shared with love."
+              </p>
+              <p style={{ fontSize: "0.95rem", lineHeight: 1.9, color: "rgba(28,10,0,0.55)", fontWeight: 300, marginBottom: 40 }}>
+                From single-origin beans carefully selected from partner farms across Colombia, Ethiopia, Kenya, and Brazil — every roast we produce starts with a handshake and ends with a cup worthy of the journey.
+              </p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                {["Direct trade partnerships with 14 farms", "Carbon-neutral roasting facility", "Zero-waste packaging initiative"].map((item) => (
+                  <div key={item} style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                    <div style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--caramel)", flexShrink: 0 }} />
+                    <span style={{ fontSize: "0.9rem", color: "rgba(28,10,0,0.65)", fontWeight: 400 }}>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Brief History — Timeline grid */}
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }} viewport={{ once: true }}
+            style={{ marginBottom: 40 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 48 }}>
+              <span className="rule" />
+              <span className="section-label">Our History</span>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 16 }}>
+              {content.map((item, i) => (
+                <motion.div key={i} className="history-card"
+                  initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.55, delay: i * 0.08 }} viewport={{ once: true }}
+                  style={{ height: 300 }}>
+                  <img src={item.url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", transition: "transform 0.5s ease" }}
+                    onMouseEnter={e => e.currentTarget.style.transform = "scale(1.06)"}
+                    onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"} />
+                  <div className="overlay" />
+                  <div className="card-text">
+                    <div style={{ fontSize: "0.65rem", letterSpacing: "0.25em", color: "var(--caramel)", textTransform: "uppercase", fontWeight: 600, marginBottom: 8 }}>{item.year}</div>
+                    <p style={{ color: "var(--cream)", fontSize: "0.85rem", lineHeight: 1.6, fontWeight: 300 }}>{item.desc}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ══ PRODUCTS ════════════════════════════════════════════ */}
+      <section id="products" style={{
+        background: "linear-gradient(180deg, #EDE0CC 0%, var(--bone) 100%)",
+        padding: "120px 32px", position: "relative", overflow: "hidden",
+      }}>
+        <div style={{ position: "absolute", top: -80, right: -80, width: 500, height: 500, borderRadius: "50%", background: "rgba(193,125,60,0.07)", filter: "blur(80px)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", bottom: -60, left: -60, width: 400, height: 400, borderRadius: "50%", background: "rgba(59,26,8,0.05)", filter: "blur(80px)", pointerEvents: "none" }} />
+
+        <div style={{ maxWidth: 1280, margin: "0 auto", position: "relative" }}>
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }} viewport={{ once: true }}
+            style={{ marginBottom: 72, display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 24 }}>
+            <div>
+              <span className="section-label">Our Selection</span>
+              <h2 className="serif" style={{ fontSize: "clamp(2.4rem, 5vw, 4rem)", fontWeight: 600, color: "var(--espresso)", lineHeight: 1.08, letterSpacing: "-0.02em", marginTop: 12 }}>
+                The Menu
+              </h2>
+            </div>
+            <p style={{ maxWidth: 360, fontSize: "0.95rem", lineHeight: 1.8, color: "rgba(28,10,0,0.5)", fontWeight: 300 }}>
+              Five exceptional blends. Each one a different chapter in the BrewHaven story.
             </p>
           </motion.div>
 
-          {/* Success/Error Messages */}
-          {success && (
-            <motion.div
-              initial={{opacity: 0, y: -10}}
-              animate={{opacity: 1, y: 0}}
-              className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6 text-center"
-            >
-              Product added to cart successfully!
-            </motion.div>
-          )}
+          {/* Feedback toasts */}
+          <AnimatePresence>
+            {success && (
+              <motion.div initial={{ opacity: 0, y: -12, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0 }}
+                style={{ background: "var(--espresso)", color: "var(--cream)", padding: "14px 24px", borderRadius: 12, marginBottom: 24, fontSize: "0.85rem", display: "inline-block" }}>
+                ✓ Added to cart
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-          {error && (
-            <motion.div
-              initial={{opacity: 0, y: -10}}
-              animate={{opacity: 1, y: 0}}
-              className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6 text-center"
-            >
-              {error}
-            </motion.div>
-          )}
-
-          {/* Product Grid */}
-          <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10">
-            {products.map((product, index) => {
-              const cartItem = cart.find((item) => item.id === product.id);
+          {/* Product grid */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 28 }}>
+            {products.map((product, i) => {
+              const cartItem = cart.find(item => item.id === product.id);
               const quantity = cartItem ? cartItem.quantity : 0;
-
               return (
-                <motion.div
-                  key={product.id}
-                  initial={{opacity: 0, y: 50}}
-                  whileInView={{opacity: 1, y: 0}}
-                  transition={{duration: 0.6, delay: index * 0.1}}
-                  className="group relative bg-white/70 backdrop-blur-xl rounded-3xl shadow-lg hover:shadow-2xl border border-amber-100 transition-all duration-500 hover:-translate-y-3 overflow-hidden"
-                >
-                  <div className="relative overflow-hidden rounded-t-3xl">
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="w-full h-64 object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-                    />
-                    <div className="absolute top-5 right-5 bg-gradient-to-r from-amber-800 to-amber-600 text-white px-4 py-1 rounded-full font-semibold shadow-md">
+                <motion.div key={product.id} className="product-card"
+                  initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: i * 0.09 }} viewport={{ once: true }}>
+
+                  {/* Image */}
+                  <div style={{ position: "relative", overflow: "hidden", height: 260 }}>
+                    <img src={product.image} alt={product.name} style={{
+                      width: "100%", height: "100%", objectFit: "cover",
+                      transition: "transform 0.6s ease",
+                    }}
+                      onMouseEnter={e => e.currentTarget.style.transform = "scale(1.07)"}
+                      onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"} />
+                    <div style={{
+                      position: "absolute", inset: 0,
+                      background: "linear-gradient(to top, rgba(28,10,0,0.35) 0%, transparent 50%)",
+                    }} />
+                    {/* Price tag */}
+                    <div style={{
+                      position: "absolute", top: 16, right: 16,
+                      background: "var(--espresso)", color: "var(--cream)",
+                      padding: "6px 16px", borderRadius: 60,
+                      fontSize: "0.8rem", fontWeight: 600, letterSpacing: "0.06em",
+                    }}>
                       {product.price}
                     </div>
-
+                    {/* Origin tag */}
+                    <div style={{
+                      position: "absolute", bottom: 16, left: 16,
+                      background: "rgba(245,237,216,0.15)", backdropFilter: "blur(8px)",
+                      color: "var(--cream)", border: "1px solid rgba(245,237,216,0.25)",
+                      padding: "4px 12px", borderRadius: 60,
+                      fontSize: "0.68rem", fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase",
+                    }}>
+                      {product.origin}
+                    </div>
                     {quantity > 0 && (
-                      <div className="absolute top-5 left-5 bg-amber-900 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">
+                      <div style={{
+                        position: "absolute", top: 16, left: 16,
+                        background: "var(--caramel)", color: "#fff",
+                        width: 28, height: 28, borderRadius: "50%",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        fontSize: "0.8rem", fontWeight: 700,
+                      }}>
                         {quantity}
                       </div>
                     )}
                   </div>
 
-                  <div className="p-6">
-                    <h3 className="text-2xl font-bold text-amber-900 mb-2">
+                  {/* Content */}
+                  <div style={{ padding: "24px 24px 28px", position: "relative", zIndex: 1 }}>
+                    <h3 className="serif" style={{ fontSize: "1.5rem", fontWeight: 600, color: "var(--espresso)", marginBottom: 6, letterSpacing: "-0.01em" }}>
                       {product.name}
                     </h3>
-                    <p className="text-gray-600 mb-6 leading-relaxed">
+                    <p style={{ fontSize: "0.85rem", color: "rgba(28,10,0,0.5)", lineHeight: 1.6, marginBottom: 24, fontWeight: 300 }}>
                       {product.description}
                     </p>
 
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => handleAddToCart(product.id)}
-                        className="flex-1 bg-amber-800 text-white py-3 rounded-full font-semibold transition-all duration-300 hover:bg-amber-700 hover:shadow-lg hover:cursor-pointer"
-                      >
-                        Add to Cart
-                      </button>
+                    {/* Qty controls */}
+                    {quantity > 0 && (
+                      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+                        <button onClick={() => updateQuantity(product.id, quantity - 1)} style={{
+                          width: 30, height: 30, borderRadius: "50%",
+                          border: "1.5px solid rgba(28,10,0,0.15)", background: "transparent",
+                          cursor: "pointer", fontSize: "1rem", color: "var(--espresso)",
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          transition: "all 0.2s",
+                        }}>−</button>
+                        <span style={{ fontSize: "0.85rem", fontWeight: 600, minWidth: 20, textAlign: "center" }}>{quantity}</span>
+                        <button onClick={() => updateQuantity(product.id, quantity + 1)} style={{
+                          width: 30, height: 30, borderRadius: "50%",
+                          border: "1.5px solid rgba(28,10,0,0.15)", background: "transparent",
+                          cursor: "pointer", fontSize: "1rem", color: "var(--espresso)",
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          transition: "all 0.2s",
+                        }}>+</button>
+                      </div>
+                    )}
 
+                    <div style={{ display: "flex", gap: 10 }}>
+                      <button className="btn-primary" onClick={() => handleAddToCart(product.id)}
+                        style={{ flex: 1, padding: "12px 20px", fontSize: "0.75rem" }}>
+                        {quantity > 0 ? "Add More" : "Add to Cart"}
+                      </button>
                       {quantity > 0 && (
-                        <button
-                          onClick={() => removeFromCart(product.id)}
-                          className="px-4 bg-red-500 text-white rounded-full font-semibold transition-all duration-300 hover:bg-red-600"
-                        >
+                        <button onClick={() => removeFromCart(product.id)}
+                          style={{
+                            padding: "12px 16px", borderRadius: 60,
+                            border: "1.5px solid rgba(193,125,60,0.3)",
+                            background: "transparent", cursor: "pointer",
+                            fontSize: "0.75rem", color: "var(--caramel)",
+                            fontFamily: "'Outfit', sans-serif",
+                            letterSpacing: "0.06em", transition: "all 0.3s",
+                          }}>
                           Remove
                         </button>
                       )}
                     </div>
-
-                    {quantity > 0 && (
-                      <div className="flex items-center justify-center gap-3 mt-3">
-                        <button
-                          onClick={() =>
-                            updateQuantity(product.id, quantity - 1)
-                          }
-                          className="w-8 h-8 bg-amber-200 rounded-full flex items-center justify-center hover:bg-amber-300"
-                        >
-                          -
-                        </button>
-                        <span className="font-semibold">Qty: {quantity}</span>
-                        <button
-                          onClick={() =>
-                            updateQuantity(product.id, quantity + 1)
-                          }
-                          className="w-8 h-8 bg-amber-200 rounded-full flex items-center justify-center hover:bg-amber-300"
-                        >
-                          +
-                        </button>
-                      </div>
-                    )}
                   </div>
                 </motion.div>
               );
             })}
           </div>
 
-          {/* Cart Summary */}
-          <div className="text-center mt-12">
-            <Link className="flex justify-center items-center" to="/cart">
-              <button className="text-white flex justify-center items-center gap-[10px] hover:bg-amber-700  hover:border-black hover:cursor-pointer hover:transition-colors hover:duration-[0.4s] duration-75 lg:p-4 px-6 rounded-2xl border bg-amber-800 lg:text-2xl text-xl font-light">
-                View Cart: {getTotalItems()}
-                <span>
-                  <MdShoppingCartCheckout />
-                </span>
-              </button>
-            </Link>
-
-            {cart.length > 0 && (
-              <button
-                onClick={clearCart}
-                className="ml-4 lg:p-4 px-6 rounded-2xl border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-colors duration-300 text-lg font-light"
-              >
+          {/* Cart bar */}
+          {cart.length > 0 && (
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+              style={{
+                marginTop: 56, display: "flex", justifyContent: "center", alignItems: "center", gap: 16, flexWrap: "wrap",
+              }}>
+              <Link to="/cart" style={{ textDecoration: "none" }}>
+                <button className="btn-primary" style={{ display: "flex", alignItems: "center", gap: 10, fontSize: "0.85rem" }}>
+                  <MdShoppingCartCheckout size={18} />
+                  View Cart ({getTotalItems()} items)
+                </button>
+              </Link>
+              <button onClick={clearCart} className="btn-outline"
+                style={{ fontSize: "0.8rem", color: "rgba(28,10,0,0.45)", borderColor: "rgba(28,10,0,0.15)" }}>
                 Clear Cart
               </button>
-            )}
-          </div>
+            </motion.div>
+          )}
         </div>
-
-        <div className="absolute -top-20 -left-20 w-72 h-72 bg-amber-200/40 blur-3xl rounded-full"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-amber-300/30 blur-3xl rounded-full"></div>
       </section>
 
-      {/* blogs section */}
-      <section id="blog" className="bg-amber-100">
-        <BlogGrid />
+      {/* ══ BLOG ════════════════════════════════════════════════ */}
+      <section id="blog" style={{ background: "var(--bone)", padding: "120px 32px 80px" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }} viewport={{ once: true }}
+            style={{ marginBottom: 56 }}>
+            <span className="section-label">From the Roastery</span>
+            <h2 className="serif" style={{ fontSize: "clamp(2.2rem, 4vw, 3.5rem)", fontWeight: 600, color: "var(--espresso)", lineHeight: 1.1, letterSpacing: "-0.02em", marginTop: 10 }}>
+              Stories & Craft
+            </h2>
+          </motion.div>
+          <BlogGrid />
+        </div>
       </section>
 
-      {/* contact us section */}
-      <section id="contact">
-        <ContactForm />
+      {/* ══ CONTACT ═════════════════════════════════════════════ */}
+      <section id="contact" style={{
+        background: "linear-gradient(160deg, var(--espresso) 0%, var(--roast) 100%)",
+        padding: "120px 32px",
+      }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }} viewport={{ once: true }}
+            style={{ marginBottom: 56 }}>
+            <span style={{ fontSize: "0.7rem", letterSpacing: "0.28em", textTransform: "uppercase", color: "var(--caramel)", fontWeight: 600 }}>Get In Touch</span>
+            <h2 className="serif" style={{ fontSize: "clamp(2.2rem, 4vw, 3.5rem)", fontWeight: 600, color: "var(--cream)", lineHeight: 1.1, letterSpacing: "-0.02em", marginTop: 10 }}>
+              Let's Talk Coffee
+            </h2>
+          </motion.div>
+          <ContactForm />
+        </div>
       </section>
 
-      {/* footer of my page */}
-      <section>
-        <Footer />
-      </section>
+      {/* ══ FOOTER ══════════════════════════════════════════════ */}
+      <Footer />
     </main>
   );
 };
