@@ -856,7 +856,7 @@ const Landing = () => {
           preload="auto"
           poster="https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg"
         >
-          <source src="public/final_stock.mp4" type="video/mp4" />
+          <source src="/final_stock.mp4" type="video/mp4" />
         </video>
 
         {/* ── Cinematic overlay layers ── */}
