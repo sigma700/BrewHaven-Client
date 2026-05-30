@@ -3,7 +3,8 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import Landing from "./pages/Landing";
 import Cart from "./pages/Cart";
 import BlogPost from "./pages/IndivBlog";
-import Checkout from "./pages/checkOut";
+import Checkout from "./pages/CheckOut";
+// import Checkout from "./pages/checkOut";
 
 const router = createBrowserRouter([
   {
