@@ -5,6 +5,10 @@ import {
   useMotionValue,
   useTransform,
 } from "framer-motion";
+import {BsCupHot} from "react-icons/bs";
+import {FaRegQuestionCircle} from "react-icons/fa";
+import {VscFeedback} from "react-icons/vsc";
+import {FaHandshakeSimple} from "react-icons/fa6";
 
 /* ── STYLES ─────────────────────────────────────────────────── */
 const ContactStyles = () => (
@@ -381,10 +385,10 @@ const ContactForm = () => {
   const MAX_MSG = 500;
 
   const moods = [
-    {key: "love", emoji: "☕", label: "Love it"},
-    {key: "question", emoji: "🤔", label: "Question"},
-    {key: "feedback", emoji: "💡", label: "Feedback"},
-    {key: "collab", emoji: "🤝", label: "Collab"},
+    {key: "love", emoji: <BsCupHot />, label: "Love it"},
+    {key: "question", emoji: <FaRegQuestionCircle />, label: "Question"},
+    {key: "feedback", emoji: <VscFeedback />, label: "Feedback"},
+    {key: "collab", emoji: <FaHandshakeSimple />, label: "Collab"},
   ];
 
   const moodPrompts = {

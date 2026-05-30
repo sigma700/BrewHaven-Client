@@ -1095,9 +1095,9 @@ const BlogGrid = () => {
               display: "flex",
               alignItems: "flex-end",
               justifyContent: "space-between",
-              marginBottom: 28,
+              marginBottom: 36,
               flexWrap: "wrap",
-              gap: 16,
+              gap: 20,
             }}
           >
             <div>
@@ -1106,22 +1106,22 @@ const BlogGrid = () => {
                   display: "flex",
                   alignItems: "center",
                   gap: 12,
-                  marginBottom: 8,
+                  marginBottom: 12,
                 }}
               >
-                <span
+                <div
                   style={{
-                    width: 36,
-                    height: 1,
+                    width: 30,
+                    height: 2,
                     background: "var(--caramel)",
                     display: "inline-block",
                   }}
                 />
                 <span
                   style={{
-                    fontFamily: "'Josefin Sans', sans-serif",
-                    fontSize: "0.6rem",
-                    letterSpacing: "0.3em",
+                    fontFamily: "'Inter', sans-serif",
+                    fontSize: "0.7rem",
+                    letterSpacing: "0.15em",
                     textTransform: "uppercase",
                     color: "var(--caramel)",
                     fontWeight: 600,
@@ -1133,79 +1133,137 @@ const BlogGrid = () => {
               <h3
                 style={{
                   fontFamily: "'Playfair Display', serif",
-                  fontSize: "clamp(1.6rem, 3vw, 2.2rem)",
+                  fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
                   fontWeight: 600,
                   color: "var(--espresso)",
                   letterSpacing: "-0.02em",
-                  lineHeight: 1.1,
+                  lineHeight: 1.2,
                 }}
               >
                 More Stories
               </h3>
             </div>
 
-            {/* Category filter pills */}
-            <div style={{display: "flex", gap: 8, flexWrap: "wrap"}}>
+            {/* Redesigned Category Filter - Modern Underline Style */}
+            <div
+              style={{
+                display: "flex",
+                gap: 4,
+                flexWrap: "wrap",
+                alignItems: "center",
+              }}
+            >
               {categories.map((cat) => (
                 <motion.button
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
-                  whileTap={{scale: 0.94}}
+                  whileHover={{scale: 1.05}}
+                  whileTap={{scale: 0.95}}
                   style={{
-                    padding: "8px 18px",
-                    borderRadius: 60,
-                    border:
-                      activeCategory === cat
-                        ? "1px solid var(--caramel)"
-                        : "1px solid rgba(28,10,0,0.12)",
-                    background:
-                      activeCategory === cat ? "var(--caramel)" : "transparent",
+                    position: "relative",
+                    padding: "10px 20px",
+                    border: "none",
+                    background: "transparent",
                     cursor: "pointer",
-                    fontFamily: "'Josefin Sans', sans-serif",
-                    fontSize: "0.6rem",
-                    letterSpacing: "0.18em",
-                    textTransform: "uppercase",
-                    fontWeight: 600,
+                    fontFamily: "'Inter', sans-serif",
+                    fontSize: "0.85rem",
+                    fontWeight: activeCategory === cat ? 600 : 500,
+                    textTransform: "none",
                     color:
                       activeCategory === cat
-                        ? "var(--ink, #0E0601)"
-                        : "rgba(28,10,0,0.4)",
-                    transition: "all 0.28s ease",
+                        ? "var(--caramel)"
+                        : "rgba(28,10,0,0.5)",
+                    transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
                   }}
                 >
                   {cat}
+                  {/* Active indicator - modern underline bar */}
+                  {activeCategory === cat && (
+                    <motion.div
+                      layoutId="activeCategory"
+                      style={{
+                        position: "absolute",
+                        bottom: 0,
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        width: "30px",
+                        height: "2px",
+                        background: "var(--caramel)",
+                        borderRadius: "2px",
+                      }}
+                      transition={{type: "spring", stiffness: 500, damping: 30}}
+                    />
+                  )}
+                  {/* Hover effect */}
+                  <span
+                    style={{
+                      position: "absolute",
+                      bottom: 0,
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                      width: "0%",
+                      height: "1px",
+                      background: "rgba(193,125,60,0.3)",
+                      transition: "width 0.3s ease",
+                    }}
+                    className="hover-line"
+                  />
                 </motion.button>
               ))}
             </div>
           </div>
 
-          {/* Filtered grid */}
+          {/* Add hover line effect styles */}
+          <style>{`
+          button:hover .hover-line {
+            width: 80% !important;
+          }
+        `}</style>
+
+          {/* Filtered grid with enhanced animations */}
           <AnimatePresence mode="wait">
             <motion.div
               key={activeCategory}
               className="grid-card-grid"
-              initial={{opacity: 0, y: 16}}
-              animate={{opacity: 1, y: 0}}
-              exit={{opacity: 0, y: -8}}
-              transition={{duration: 0.4}}
+              initial={{opacity: 0}}
+              animate={{opacity: 1}}
+              exit={{opacity: 0}}
+              transition={{duration: 0.3}}
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-                gap: 24,
+                gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+                gap: 28,
               }}
             >
               {filtered.length > 0 ? (
                 filtered.map((story, i) => (
-                  <GridCard key={story.id} story={story} index={i} />
+                  <motion.div
+                    key={story.id}
+                    initial={{opacity: 0, scale: 0.95}}
+                    animate={{opacity: 1, scale: 1}}
+                    exit={{opacity: 0, scale: 0.95}}
+                    transition={{
+                      duration: 0.4,
+                      delay: i * 0.05,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    whileHover={{
+                      y: -8,
+                      transition: {duration: 0.2},
+                    }}
+                  >
+                    <GridCard story={story} index={i} />
+                  </motion.div>
                 ))
               ) : (
                 <motion.div
-                  initial={{opacity: 0}}
-                  animate={{opacity: 1}}
+                  initial={{opacity: 0, scale: 0.95}}
+                  animate={{opacity: 1, scale: 1}}
+                  exit={{opacity: 0, scale: 0.95}}
                   style={{
                     gridColumn: "1/-1",
                     textAlign: "center",
-                    padding: "48px 0",
+                    padding: "60px 0",
                   }}
                 >
                   <p
