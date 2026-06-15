@@ -14,6 +14,7 @@ import Footer from "./components/footer";
 import {FullMenu} from "./components/mobileMenu";
 import {MdShoppingCartCheckout} from "react-icons/md";
 import {GiBullseye, GiPlantWatering, GiPlasticDuck} from "react-icons/gi";
+
 /* ── GLOBAL STYLES ─────────────────────────────────────────── */
 const GlobalStyles = () => (
   <style>{`
@@ -210,20 +211,35 @@ const GlobalStyles = () => (
       color: var(--caramel);
     }
 
-    /* Divider line */
-    .rule {
-      width: 48px; height: 2px;
-      background: var(--caramel);
-      display: inline-block;
-    }
-
-    /* Section label */
+    /* Section label — refined, no leading dash/rule */
     .section-label {
       font-family: 'Inter', sans-serif;
       font-size: 0.75rem;
       font-weight: 600;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
+      color: var(--caramel);
+      position: relative;
+      padding-bottom: 10px;
+      display: inline-block;
+    }
+    .section-label::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 28px; height: 2px;
+      background: var(--caramel);
+      border-radius: 2px;
+    }
+    .section-label-center {
+      text-align: center;
+      display: block;
+    }
+    .section-label-center::after {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .section-label-light {
       color: var(--caramel);
     }
 
@@ -237,87 +253,23 @@ const GlobalStyles = () => (
       z-index: 0;
     }
 
-    /* Corner bracket decorations */
-    .corner-tl {
-      position: absolute;
-      top: 96px; left: 48px;
-      width: 72px; height: 72px;
-      border-top: 1px solid rgba(193,125,60,0.35);
-      border-left: 1px solid rgba(193,125,60,0.35);
-      pointer-events: none;
-      z-index: 5;
-    }
-    .corner-br {
-      position: absolute;
-      bottom: 96px; right: 48px;
-      width: 72px; height: 72px;
-      border-bottom: 1px solid rgba(193,125,60,0.35);
-      border-right: 1px solid rgba(193,125,60,0.35);
-      pointer-events: none;
-      z-index: 5;
-    }
-
-    /* Side rotated text */
-    .hero-side-text {
-      position: absolute;
-      right: 36px;
-      top: 50%;
-      transform: translateY(-50%) rotate(90deg);
-      z-index: 5;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
-      color: rgba(245,237,216,0.25);
-      text-transform: uppercase;
-      white-space: nowrap;
-      pointer-events: none;
-      font-weight: 400;
-    }
-
-    /* Year badge */
-    .year-badge {
-      position: absolute;
-      top: 50%;
-      right: 72px;
-      transform: translateY(-50%);
-      z-index: 5;
-    }
-    .year-circle {
-      width: 116px;
-      height: 116px;
-      border-radius: 50%;
-      border: 1px solid rgba(193,125,60,0.4);
+    /* Avatar trust group */
+    .avatar-stack {
       display: flex;
-      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      background: rgba(14,6,1,0.35);
-      backdrop-filter: blur(8px);
     }
-    .year-num {
-      font-family: 'Playfair Display', serif;
-      font-size: 2rem;
-      font-weight: 600;
-      color: var(--cream);
-      line-height: 1;
+    .avatar-stack img {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--ink);
+      margin-left: -10px;
     }
-    .year-since {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.55rem;
-      letter-spacing: 0.15em;
-      color: var(--caramel);
-      text-transform: uppercase;
-      font-weight: 600;
-      margin-top: 4px;
-    }
+    .avatar-stack img:first-child { margin-left: 0; }
 
     @keyframes scrollPulse {
       0%, 100% { transform: scaleY(1); opacity: 1; }
       50%       { transform: scaleY(0.65); opacity: 0.35; }
-    }
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
     }
   `}</style>
 );
@@ -474,7 +426,6 @@ const Landing = () => {
           display: inline-block;
           overflow: hidden;
         }
-        /* Two stacked text layers — top one is the "filled" colour */
         .nav-ink .ink-top {
           position: absolute; inset: 0;
           display: flex; align-items: center;
@@ -491,7 +442,6 @@ const Landing = () => {
           clip-path: inset(0% 0 0 0);
         }
 
-        /* ── LOGO: letter-spacing breathe ── */
         .nav-logo-name {
           display: inline-block;
           transition: letter-spacing 0.55s cubic-bezier(0.22, 1, 0.36, 1),
@@ -501,7 +451,6 @@ const Landing = () => {
           letter-spacing: 0.02em !important;
         }
 
-        /* ── CART BUTTON: magnetic bounce ── */
         .nav-cart-btn {
           position: relative; overflow: hidden;
           transition: transform 0.25s ease, box-shadow 0.3s ease,
@@ -513,7 +462,6 @@ const Landing = () => {
         }
         .nav-cart-btn:active { transform: translateY(0) scale(0.96); }
 
-        /* Cart item count ping */
         @keyframes cartPing {
           0%   { transform: scale(1); opacity: 1; }
           70%  { transform: scale(2.2); opacity: 0; }
@@ -527,7 +475,6 @@ const Landing = () => {
           pointer-events: none;
         }
 
-        /* ── LOGIN / SIGNUP: split shimmer ── */
         .nav-action-btn {
           position: relative; overflow: hidden;
           cursor: pointer;
@@ -549,7 +496,6 @@ const Landing = () => {
         }
         .nav-action-btn:hover { transform: translateY(-2px); }
 
-        /* ── NAV BAR: frosted border sweeps in ── */
         .nav-bar-inner::after {
           content: '';
           position: absolute; bottom: 0; left: 50%;
@@ -562,7 +508,6 @@ const Landing = () => {
         }
         .nav-bar-inner:hover::after { width: 80%; }
 
-        /* Smooth scroll-based transitions */
         .nav-transition {
           transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1) !important;
         }
@@ -643,7 +588,7 @@ const Landing = () => {
             </div>
           </motion.a>
 
-          {/* ── DESKTOP NAV LINKS: ink-wipe effect ── */}
+          {/* ── DESKTOP NAV LINKS ── */}
           <motion.ul
             initial={{opacity: 0}}
             animate={{opacity: 1}}
@@ -668,7 +613,6 @@ const Landing = () => {
                 }}
               >
                 <a href={`#${item.toLowerCase()}`} className="nav-ink">
-                  {/* Base text layer */}
                   <span
                     className="ink-base"
                     style={{
@@ -680,7 +624,6 @@ const Landing = () => {
                   >
                     {item}
                   </span>
-                  {/* Caramel fill layer that wipes up on hover */}
                   <span className="ink-top" aria-hidden="true">
                     {item}
                   </span>
@@ -696,7 +639,6 @@ const Landing = () => {
             transition={{delay: 0.4}}
             style={{display: "flex", gap: 12, alignItems: "center"}}
           >
-            {/* Login */}
             <button
               className="nav-action-btn hidden-mobile"
               style={{
@@ -721,7 +663,6 @@ const Landing = () => {
               Login
             </button>
 
-            {/* Sign Up */}
             <button
               className="nav-action-btn"
               style={{
@@ -749,7 +690,6 @@ const Landing = () => {
               Sign Up
             </button>
 
-            {/* Cart */}
             <Link to="/cart" style={{textDecoration: "none"}}>
               <button
                 className="nav-cart-btn"
@@ -773,7 +713,6 @@ const Landing = () => {
                   transition: "all 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
                 }}
               >
-                {/* Ping ring when cart has items */}
                 {getTotalItems() > 0 && <span className="cart-ping" />}
                 <MdShoppingCartCheckout size={18} />
                 <span style={{fontWeight: 600, minWidth: 12}}>
@@ -812,9 +751,9 @@ const Landing = () => {
         @media (max-width: 1024px) {
           .hidden-mobile { display: none !important; }
           .show-mobile   { display: block !important; }
-          .corner-tl, .corner-br, .hero-side-text, .year-badge { display: none !important; }
         }
       `}</style>
+
       {/* ══ HERO — VIDEO BACKGROUND ══════════════════════════════ */}
       <section
         id="home"
@@ -826,25 +765,30 @@ const Landing = () => {
           display: "flex",
           alignItems: "center",
           padding: "0 48px",
-          background: "#0E0601" /* fallback while video loads */,
+          background: "#0E0601",
         }}
       >
-        {/* Add Bodoni font to the section */}
         <style>{`
           @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600;6..96,700;6..96,800;6..96,900&display=swap');
-          
+
           .hero-headline {
             font-family: 'Bodoni Moda', serif !important;
           }
-          
+
           .hero-subhead {
             font-family: 'Bodoni Moda', serif !important;
             font-weight: 400 !important;
           }
-          
+
           .hero-stats {
             font-family: 'Bodoni Moda', serif !important;
           }
+
+          @media (max-width: 1024px) {
+            .hero-stats-strip { display: none !important; }
+            .hero-trust-mobile { display: flex !important; }
+          }
+          .hero-trust-mobile { display: none; }
         `}</style>
 
         <video
@@ -860,7 +804,6 @@ const Landing = () => {
         </video>
 
         {/* ── Cinematic overlay layers ── */}
-        {/* Soft gradient for text readability */}
         <div
           style={{
             position: "absolute",
@@ -870,7 +813,6 @@ const Landing = () => {
               "linear-gradient(135deg, rgba(14,6,1,0.85) 0%, rgba(14,6,1,0.5) 50%, rgba(14,6,1,0.2) 100%)",
           }}
         />
-        {/* Bottom vignette for depth */}
         <div
           style={{
             position: "absolute",
@@ -880,15 +822,6 @@ const Landing = () => {
               "linear-gradient(to top, rgba(14,6,1,0.6) 0%, transparent 50%)",
           }}
         />
-
-        {/* ── Corner bracket decorations ── */}
-        <div className="corner-tl" />
-        <div className="corner-br" />
-
-        {/* ── Rotated side text ── */}
-        <div className="hero-side-text">
-          Ethically Sourced · Artisan Roasted · Served with Soul
-        </div>
 
         {/* ── Hero content ── */}
         <motion.div
@@ -908,28 +841,24 @@ const Landing = () => {
             animate={{opacity: 1, y: 0}}
             transition={{duration: 0.7}}
             style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 16,
               marginBottom: 24,
             }}
           >
-            <span className="rule" />
             <span
               style={{
                 fontFamily: "'Inter', sans-serif",
                 fontSize: "0.75rem",
-                letterSpacing: "0.1em",
+                letterSpacing: "0.28em",
                 textTransform: "uppercase",
                 color: "var(--caramel)",
                 fontWeight: 600,
               }}
             >
-              Est. 2012 · Artisan Roasters
+              Artisan Roasters
             </span>
           </motion.div>
 
-          {/* Headline - Using Bodoni font for dramatic impact */}
+          {/* Headline */}
           <motion.h1
             initial={{opacity: 0, y: 40}}
             animate={{opacity: 1, y: 0}}
@@ -960,7 +889,7 @@ const Landing = () => {
             </span>
           </motion.h1>
 
-          {/* Subheading - Premium serif for elegance */}
+          {/* Subheading */}
           <motion.p
             initial={{opacity: 0, y: 20}}
             animate={{opacity: 1, y: 0}}
@@ -1001,8 +930,9 @@ const Landing = () => {
             </a>
           </motion.div>
 
-          {/* Stats strip - Using Bodoni for numbers */}
+          {/* Stats strip */}
           <motion.div
+            className="hero-stats-strip"
             initial={{opacity: 0}}
             animate={{opacity: 1}}
             transition={{delay: 0.75}}
@@ -1045,24 +975,6 @@ const Landing = () => {
           </motion.div>
         </motion.div>
 
-        {/* ── Year badge (desktop) ── */}
-        <motion.div
-          className="year-badge hidden-mobile"
-          initial={{opacity: 0, scale: 0.9}}
-          animate={{opacity: 1, scale: 1}}
-          transition={{delay: 1.1, duration: 0.8, type: "spring"}}
-        >
-          <div className="year-circle">
-            <div
-              className="year-num"
-              style={{fontFamily: "'Bodoni Moda', serif", fontWeight: 700}}
-            >
-              2012
-            </div>
-            <div className="year-since">Since</div>
-          </div>
-        </motion.div>
-
         {/* ── Scroll indicator ── */}
         <motion.div
           initial={{opacity: 0}}
@@ -1103,6 +1015,7 @@ const Landing = () => {
           />
         </motion.div>
       </section>
+
       {/* ══ ABOUT ════════════════════════════════════════════════ */}
       <section
         id="about"
@@ -1112,7 +1025,6 @@ const Landing = () => {
           position: "relative",
         }}
       >
-        {/* Premium decorative elements */}
         <div
           style={{
             position: "absolute",
@@ -1127,7 +1039,7 @@ const Landing = () => {
         />
 
         <div style={{maxWidth: 1280, margin: "0 auto", position: "relative"}}>
-          {/* Section Header - Refined and elegant */}
+          {/* Section Header */}
           <motion.div
             initial={{opacity: 0, y: 30}}
             whileInView={{opacity: 1, y: 0}}
@@ -1135,44 +1047,12 @@ const Landing = () => {
             viewport={{once: true}}
             style={{marginBottom: 100, textAlign: "center"}}
           >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 16,
-                marginBottom: 24,
-              }}
+            <span
+              className="section-label section-label-center"
+              style={{marginBottom: 24}}
             >
-              <div
-                style={{
-                  width: 60,
-                  height: 1,
-                  background:
-                    "linear-gradient(90deg, transparent, var(--caramel))",
-                }}
-              />
-              <span
-                style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: "0.75rem",
-                  fontWeight: 600,
-                  letterSpacing: "0.2em",
-                  textTransform: "uppercase",
-                  color: "var(--caramel)",
-                }}
-              >
-                Welcome to BrewHaven
-              </span>
-              <div
-                style={{
-                  width: 60,
-                  height: 1,
-                  background:
-                    "linear-gradient(90deg, var(--caramel), transparent)",
-                }}
-              />
-            </div>
+              Welcome to BrewHaven
+            </span>
             <h2
               className="serif"
               style={{
@@ -1182,6 +1062,7 @@ const Landing = () => {
                 lineHeight: 1.15,
                 letterSpacing: "-0.02em",
                 marginBottom: 24,
+                marginTop: 28,
               }}
             >
               Rooted in passion,
@@ -1207,7 +1088,7 @@ const Landing = () => {
             </p>
           </motion.div>
 
-          {/* Premium Image + Text section - Completely reorganized */}
+          {/* Premium Image + Text section */}
           <div
             style={{
               display: "grid",
@@ -1219,7 +1100,7 @@ const Landing = () => {
             }}
             className="about-premium-grid"
           >
-            {/* Left Column - Image with premium styling */}
+            {/* Left Column - Image */}
             <motion.div
               initial={{opacity: 0, x: -50}}
               whileInView={{opacity: 1, x: 0}}
@@ -1255,7 +1136,6 @@ const Landing = () => {
                 />
               </div>
 
-              {/* Decorative corner accent */}
               <div
                 style={{
                   position: "absolute",
@@ -1271,40 +1151,17 @@ const Landing = () => {
               />
             </motion.div>
 
-            {/* Right Column - Content with premium typography */}
+            {/* Right Column - Content */}
             <motion.div
               initial={{opacity: 0, x: 50}}
               whileInView={{opacity: 1, x: 0}}
               transition={{duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1]}}
               viewport={{once: true}}
             >
-              <div
-                style={{
-                  marginBottom: 40,
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 12,
-                    marginBottom: 28,
-                  }}
-                >
-                  <div className="rule" />
-                  <span
-                    style={{
-                      fontFamily: "'Inter', sans-serif",
-                      fontSize: "0.75rem",
-                      fontWeight: 600,
-                      letterSpacing: "0.2em",
-                      textTransform: "uppercase",
-                      color: "var(--caramel)",
-                    }}
-                  >
-                    Our Philosophy
-                  </span>
-                </div>
+              <div style={{marginBottom: 40}}>
+                <span className="section-label" style={{marginBottom: 28}}>
+                  Our Philosophy
+                </span>
 
                 <div
                   className="serif"
@@ -1314,6 +1171,7 @@ const Landing = () => {
                     lineHeight: 1.4,
                     color: "var(--espresso)",
                     marginBottom: 32,
+                    marginTop: 28,
                     letterSpacing: "-0.01em",
                     position: "relative",
                   }}
@@ -1359,7 +1217,7 @@ const Landing = () => {
                   }}
                 >
                   From single-origin beans carefully selected from partner farms
-                  across Colombia, Ethiopia, Kenya, and Brazil , every roast we
+                  across Colombia, Ethiopia, Kenya, and Brazil, every roast we
                   produce starts with a handshake and ends with a cup worthy of
                   the journey.
                 </p>
@@ -1444,7 +1302,7 @@ const Landing = () => {
             </motion.div>
           </div>
 
-          {/* History timeline grid - Kept exactly as you requested */}
+          {/* History timeline grid */}
           <motion.div
             initial={{opacity: 0, y: 20}}
             whileInView={{opacity: 1, y: 0}}
@@ -1452,15 +1310,7 @@ const Landing = () => {
             viewport={{once: true}}
             style={{marginBottom: 40}}
           >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 14,
-                marginBottom: 48,
-              }}
-            >
-              <span className="rule" />
+            <div style={{marginBottom: 48}}>
               <span className="section-label">Our History</span>
             </div>
             <div
@@ -1541,7 +1391,7 @@ const Landing = () => {
               height: 450px !important;
             }
           }
-          
+
           @media (max-width: 640px) {
             .about-image {
               height: 350px !important;
@@ -1560,33 +1410,6 @@ const Landing = () => {
           overflow: "hidden",
         }}
       >
-        <div
-          style={{
-            position: "absolute",
-            top: -80,
-            right: -80,
-            width: 500,
-            height: 500,
-            borderRadius: "50%",
-            background: "rgba(193,125,60,0.07)",
-            filter: "blur(80px)",
-            pointerEvents: "none",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            bottom: -60,
-            left: -60,
-            width: 400,
-            height: 400,
-            borderRadius: "50%",
-            background: "rgba(59,26,8,0.05)",
-            filter: "blur(80px)",
-            pointerEvents: "none",
-          }}
-        />
-
         <div style={{maxWidth: 1280, margin: "0 auto", position: "relative"}}>
           <motion.div
             initial={{opacity: 0, y: 30}}
@@ -1612,7 +1435,7 @@ const Landing = () => {
                   color: "var(--espresso)",
                   lineHeight: 1.1,
                   letterSpacing: "-0.02em",
-                  marginTop: 12,
+                  marginTop: 20,
                 }}
               >
                 The Menu
@@ -1972,7 +1795,7 @@ const Landing = () => {
                 color: "var(--espresso)",
                 lineHeight: 1.15,
                 letterSpacing: "-0.02em",
-                marginTop: 12,
+                marginTop: 20,
               }}
             >
               Stories &amp; Craft
@@ -2000,14 +1823,8 @@ const Landing = () => {
             style={{marginBottom: 56}}
           >
             <span
-              style={{
-                fontSize: "0.75rem",
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-                color: "var(--caramel)",
-                fontWeight: 600,
-                fontFamily: "'Inter', sans-serif",
-              }}
+              className="section-label section-label-light"
+              style={{fontSize: "0.75rem", letterSpacing: "0.22em"}}
             >
               Get In Touch
             </span>
@@ -2019,7 +1836,7 @@ const Landing = () => {
                 color: "var(--cream)",
                 lineHeight: 1.15,
                 letterSpacing: "-0.02em",
-                marginTop: 12,
+                marginTop: 20,
               }}
             >
               Let's Talk Coffee

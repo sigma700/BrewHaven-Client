@@ -508,7 +508,6 @@ const ContactForm = () => {
                 marginBottom: 20,
               }}
             >
-              <span className="cf-rule" />
               <span
                 style={{
                   fontFamily: "'Josefin Sans', sans-serif",

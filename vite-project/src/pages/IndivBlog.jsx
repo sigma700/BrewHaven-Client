@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useRef} from "react";
-import {motion, useScroll, useSpring, useTransform} from "framer-motion";
+import React, {useState, useRef} from "react";
+import {motion, useScroll, useSpring} from "framer-motion";
 import {Link, useParams} from "react-router-dom";
 
 /* ── DATA ───────────────────────────────────────────────────── */
@@ -306,6 +306,27 @@ const BlogPost = () => {
         .related-card:hover {
           box-shadow: 0 20px 60px rgba(28,10,0,0.12);
           transform: translateY(-4px);
+        }
+
+        /* Section label — refined, no leading dash */
+        .post-section-label {
+          font-family: 'Outfit', sans-serif;
+          font-size: 0.7rem;
+          font-weight: 600;
+          letter-spacing: 0.28em;
+          text-transform: uppercase;
+          color: var(--caramel);
+          position: relative;
+          padding-bottom: 10px;
+          display: inline-block;
+        }
+        .post-section-label::after {
+          content: '';
+          position: absolute;
+          bottom: 0; left: 0;
+          width: 28px; height: 2px;
+          background: var(--caramel);
+          border-radius: 2px;
         }
 
         /* Blockquote style for excerpt */
@@ -704,27 +725,9 @@ const BlogPost = () => {
               whileInView={{opacity: 1, y: 0}}
               transition={{duration: 0.6}}
               viewport={{once: true}}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 16,
-                marginBottom: 48,
-              }}
+              style={{marginBottom: 48}}
             >
-              <div
-                style={{width: 40, height: 1, background: "var(--caramel)"}}
-              />
-              <span
-                style={{
-                  fontSize: "0.7rem",
-                  letterSpacing: "0.28em",
-                  textTransform: "uppercase",
-                  color: "var(--caramel)",
-                  fontWeight: 600,
-                }}
-              >
-                Continue Reading
-              </span>
+              <span className="post-section-label">Continue Reading</span>
             </motion.div>
 
             <div

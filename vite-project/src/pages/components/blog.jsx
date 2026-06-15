@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect, useCallback} from "react";
+import React, {useState, useRef, useEffect} from "react";
 import {
   motion,
   AnimatePresence,
@@ -39,33 +39,62 @@ const coffeeStories = [
     featured: true,
   },
   {
-    id: 3,
-    title: "The Dancing Goats",
-    subtitle: "Ethiopia's Discovery Legend",
+    id: 11,
+    title: "Coffee Farmers Move Higher",
+    subtitle: "Climate Change Reshapes Production",
     excerpt:
-      "How a 9th-century goatherd named Kaldi discovered coffee's energizing effects through his mysteriously lively goats.",
-    image: "/ethiopia.jpg",
-    category: "History",
-    readTime: "3 min",
-    date: "Oct 20, 2025",
-    source: "Cuisine Barista",
-    color: "#6B3A2A",
+      "Across Latin America and East Africa, coffee growers are relocating farms to higher elevations as warming temperatures threaten traditional growing zones.",
+    image: "/higher-altitude-coffee.jpg",
+    category: "Climate",
+    readTime: "5 min",
+    date: "Jan 14, 2026",
+    source: "Reuters",
+    color: "#3A5A40",
     featured: false,
   },
   {
-    id: 4,
-    title: "Coffee & The French Revolution",
-    subtitle: "How Cafés Changed History",
+    id: 12,
+    title: "The Rise of Specialty Coffee",
+    subtitle: "Why Consumers Are Paying More",
     excerpt:
-      "How Parisian cafés became breeding grounds for revolutionary ideas and political change in 18th century France.",
-    image: "/french-rev.jpg",
-    category: "Culture",
+      "Demand for traceable, ethically sourced coffee continues to rise as consumers increasingly value quality, sustainability and origin transparency.",
+    image: "/specialty-coffee.jpg",
+    category: "Consumer Trends",
     readTime: "4 min",
-    date: "Oct 18, 2025",
-    source: "Cuisine Barista",
-    color: "#4A3728",
+    date: "Dec 8, 2025",
+    source: "Specialty Coffee Association",
+    color: "#8B5E34",
     featured: false,
   },
+  {
+    id: 13,
+    title: "Kenya's Coffee Revival",
+    subtitle: "A New Generation of Growers",
+    excerpt:
+      "Young entrepreneurs and cooperatives are modernizing coffee farming in Kenya, helping improve yields and reconnect global buyers with premium African beans.",
+    image: "/kenya-revival.jpg",
+    category: "Africa",
+    readTime: "4 min",
+    date: "Nov 28, 2025",
+    source: "Daily Nation",
+    color: "#5B412C",
+    featured: false,
+  },
+  {
+    id: 14,
+    title: "Inside the World's Best Cafés",
+    subtitle: "Design, Community & Craft",
+    excerpt:
+      "Award-winning coffee shops are redefining customer experience through architecture, storytelling and meticulous brewing techniques.",
+    image: "/world-best-cafes.jpg",
+    category: "Culture",
+    readTime: "3 min",
+    date: "Feb 2, 2026",
+    source: "Sprudge",
+    color: "#4E342E",
+    featured: false,
+  },
+
   {
     id: 5,
     title: "Jack Simpson: World Champion",
@@ -94,6 +123,49 @@ const coffeeStories = [
     color: "#3D2B1F",
     featured: false,
   },
+
+  {
+    id: 8,
+    title: "The Coffee Rust Disaster",
+    subtitle: "A Disease That Crippled Farms",
+    excerpt:
+      "Coffee leaf rust devastated farms across Latin America, wiping out harvests and threatening livelihoods as growers fought to save their crops from a relentless fungal outbreak.",
+    image: "/coffee-rust.jpg",
+    category: "Agriculture",
+    readTime: "4 min",
+    date: "Oct 16, 2018",
+    source: "NPR",
+    color: "#6E4B3A",
+    featured: false,
+  },
+  {
+    id: 9,
+    title: "Farmers Battle Coffee Diseases",
+    subtitle: "Protecting Kenya's Coffee Future",
+    excerpt:
+      "Kenyan farmers are intensifying efforts against coffee berry disease and leaf rust as climate pressures increase the vulnerability of coffee farms across the country.",
+    image: "/kenya-coffee-farmers.jpg",
+    category: "Africa",
+    readTime: "4 min",
+    date: "Apr 13, 2025",
+    source: "Kenya News Agency",
+    color: "#5B412C",
+    featured: false,
+  },
+  {
+    id: 10,
+    title: "A Champion's Journey",
+    subtitle: "Jack Simpson Reaches The Top",
+    excerpt:
+      "After years of international competition and near misses, Australian barista Jack Simpson captured the 2025 World Barista Championship in Milan.",
+    image: "/jack-simpson.jpg",
+    category: "Championships",
+    readTime: "3 min",
+    date: "Oct 21, 2025",
+    source: "World Coffee Championships",
+    color: "#1E3A5F",
+    featured: false,
+  },
 ];
 
 /* ── STYLES ─────────────────────────────────────────────────── */
@@ -112,27 +184,25 @@ const BlogStyles = () => (
 
     .bg-blog { font-family: 'Josefin Sans', sans-serif; }
 
-    /* ── CUSTOM CURSOR ── */
-    .blog-cursor {
-      position: fixed;
-      pointer-events: none;
-      z-index: 99999;
-      mix-blend-mode: difference;
+    /* ── SECTION LABEL (no leading dash) ── */
+    .blog-section-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--caramel);
+      position: relative;
+      padding-bottom: 10px;
+      display: inline-block;
     }
-    .blog-cursor-dot {
-      width: 8px; height: 8px; border-radius: 50%;
+    .blog-section-label::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 28px; height: 2px;
       background: var(--caramel);
-      transform: translate(-50%, -50%);
-    }
-    .blog-cursor-ring {
-      width: 36px; height: 36px; border-radius: 50%;
-      border: 1px solid rgba(193,125,60,0.5);
-      transform: translate(-50%, -50%);
-      transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
-    }
-    .blog-cursor-ring.expanded {
-      width: 72px; height: 72px;
-      border-color: rgba(193,125,60,0.8);
+      border-radius: 2px;
     }
 
     /* ── CAROUSEL ── */
@@ -308,9 +378,6 @@ const BlogStyles = () => (
     }
     .grid-card:hover .read-arrow-icon { transform: translateX(4px); }
 
-    /* ── SECTION RULE ── */
-    .blog-rule { width: 40px; height: 1px; background: var(--caramel); display: inline-block; }
-
     /* ── DRAG HINT ── */
     .drag-hint {
       display: flex; align-items: center; gap: 10px;
@@ -351,45 +418,6 @@ const BlogStyles = () => (
   `}</style>
 );
 
-/* ── CUSTOM CURSOR ──────────────────────────────────────────── */
-const BlogCursor = () => {
-  const dotRef = useRef(null);
-  const ringRef = useRef(null);
-  const [hovered, setHovered] = useState(false);
-
-  const dotX = useMotionValue(0);
-  const dotY = useMotionValue(0);
-  const ringX = useSpring(dotX, {stiffness: 140, damping: 18});
-  const ringY = useSpring(dotY, {stiffness: 140, damping: 18});
-
-  useEffect(() => {
-    const onMove = (e) => {
-      dotX.set(e.clientX);
-      dotY.set(e.clientY);
-    };
-    const onEnter = () => setHovered(true);
-    const onLeave = () => setHovered(false);
-    window.addEventListener("mousemove", onMove);
-    document
-      .querySelectorAll("a, button, .carousel-card, .grid-card")
-      .forEach((el) => {
-        el.addEventListener("mouseenter", onEnter);
-        el.addEventListener("mouseleave", onLeave);
-      });
-    return () => window.removeEventListener("mousemove", onMove);
-  }, []);
-
-  return (
-    <>
-      <motion.div className="blog-cursor" style={{left: dotX, top: dotY}}>
-        <div className="blog-cursor-dot" />
-      </motion.div>
-      <motion.div className="blog-cursor" style={{left: ringX, top: ringY}}>
-        <div className={`blog-cursor-ring${hovered ? " expanded" : ""}`} />
-      </motion.div>
-    </>
-  );
-};
 /* ── FEATURED CAROUSEL ──────────────────────────────────────── */
 const FeaturedCarousel = ({stories}) => {
   const trackRef = useRef(null);
@@ -397,15 +425,14 @@ const FeaturedCarousel = ({stories}) => {
   const isDragging = useRef(false);
   const startX = useRef(0);
   const scrollLeft = useRef(0);
-  const [cardWidth, setCardWidth] = useState(520); // Default width
+  const [cardWidth, setCardWidth] = useState(520);
 
-  // Calculate actual card width including gap on mount and resize
   useEffect(() => {
     const updateCardWidth = () => {
       if (trackRef.current && trackRef.current.children[0]) {
         const firstCard = trackRef.current.children[0];
         const rect = firstCard.getBoundingClientRect();
-        const gap = 28; // gap between cards
+        const gap = 28;
         setCardWidth(rect.width + gap);
       }
     };
@@ -432,7 +459,6 @@ const FeaturedCarousel = ({stories}) => {
     setActiveIdx(i);
   };
 
-  /* Drag-to-scroll */
   const onMouseDown = (e) => {
     isDragging.current = true;
     startX.current = e.pageX - trackRef.current.offsetLeft;
@@ -445,7 +471,7 @@ const FeaturedCarousel = ({stories}) => {
     if (!isDragging.current) return;
     e.preventDefault();
     const x = e.pageX - trackRef.current.offsetLeft;
-    const walk = (x - startX.current) * 1.5; // scroll speed multiplier
+    const walk = (x - startX.current) * 1.5;
     trackRef.current.scrollLeft = scrollLeft.current - walk;
   };
 
@@ -457,7 +483,6 @@ const FeaturedCarousel = ({stories}) => {
     }
   };
 
-  // Disable drag when clicking on buttons/links
   const onMouseDownCapture = (e) => {
     if (e.target.closest("button") || e.target.closest("a")) {
       isDragging.current = false;
@@ -713,16 +738,13 @@ const GridCard = ({story, index}) => {
   const rawX = useMotionValue(0);
   const rawY = useMotionValue(0);
 
-  // Spring-smooth the raw values so motion feels physical
   const springConfig = {stiffness: 180, damping: 18, mass: 0.6};
   const x = useSpring(rawX, springConfig);
   const y = useSpring(rawY, springConfig);
 
-  // Map normalised [-0.5, 0.5] → rotation degrees (larger = more dramatic)
   const rotateX = useTransform(y, [-0.5, 0.5], [10, -10]);
   const rotateY = useTransform(x, [-0.5, 0.5], [-10, 10]);
 
-  // Subtle shine highlight that tracks the mouse
   const glareX = useTransform(x, [-0.5, 0.5], ["0%", "100%"]);
   const glareY = useTransform(y, [-0.5, 0.5], ["0%", "100%"]);
 
@@ -740,7 +762,6 @@ const GridCard = ({story, index}) => {
   const formattedDate = story.date;
 
   return (
-    // Perspective MUST be on the parent — not the rotating element
     <motion.div
       initial={{opacity: 0, y: 32}}
       whileInView={{opacity: 1, y: 0}}
@@ -762,7 +783,6 @@ const GridCard = ({story, index}) => {
         <div className="grid-card-img-wrap">
           <img className="grid-card-img" src={story.image} alt={story.title} />
 
-          {/* Overlay gradient */}
           <div
             style={{
               position: "absolute",
@@ -773,7 +793,6 @@ const GridCard = ({story, index}) => {
             }}
           />
 
-          {/* Category tag */}
           <div style={{position: "absolute", bottom: 14, left: 14}}>
             <span
               className="cat-tag"
@@ -979,6 +998,9 @@ const BlogGrid = () => {
       <BlogStyles />
       <style>{`
         .grid-card:hover .card-bottom-line { width: 100% !important; }
+        button:hover .hover-line {
+          width: 80% !important;
+        }
       `}</style>
 
       <div className="bg-blog">
@@ -1002,35 +1024,9 @@ const BlogGrid = () => {
             }}
           >
             <div>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 12,
-                  marginBottom: 8,
-                }}
-              >
-                <span
-                  style={{
-                    width: 36,
-                    height: 1,
-                    background: "var(--caramel)",
-                    display: "inline-block",
-                  }}
-                />
-                <span
-                  style={{
-                    fontFamily: "'Josefin Sans', sans-serif",
-                    fontSize: "0.6rem",
-                    letterSpacing: "0.3em",
-                    textTransform: "uppercase",
-                    color: "var(--caramel)",
-                    fontWeight: 600,
-                  }}
-                >
-                  Editor's Pick
-                </span>
-              </div>
+              <span className="blog-section-label" style={{marginBottom: 8}}>
+                Editor's Pick
+              </span>
               <h3
                 style={{
                   fontFamily: "'Playfair Display', serif",
@@ -1039,6 +1035,7 @@ const BlogGrid = () => {
                   color: "var(--espresso)",
                   letterSpacing: "-0.02em",
                   lineHeight: 1.1,
+                  marginTop: 16,
                 }}
               >
                 Featured Stories
@@ -1101,35 +1098,9 @@ const BlogGrid = () => {
             }}
           >
             <div>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 12,
-                  marginBottom: 12,
-                }}
-              >
-                <div
-                  style={{
-                    width: 30,
-                    height: 2,
-                    background: "var(--caramel)",
-                    display: "inline-block",
-                  }}
-                />
-                <span
-                  style={{
-                    fontFamily: "'Inter', sans-serif",
-                    fontSize: "0.7rem",
-                    letterSpacing: "0.15em",
-                    textTransform: "uppercase",
-                    color: "var(--caramel)",
-                    fontWeight: 600,
-                  }}
-                >
-                  From the Archive
-                </span>
-              </div>
+              <span className="blog-section-label" style={{marginBottom: 8}}>
+                From the Archive
+              </span>
               <h3
                 style={{
                   fontFamily: "'Playfair Display', serif",
@@ -1138,13 +1109,14 @@ const BlogGrid = () => {
                   color: "var(--espresso)",
                   letterSpacing: "-0.02em",
                   lineHeight: 1.2,
+                  marginTop: 16,
                 }}
               >
                 More Stories
               </h3>
             </div>
 
-            {/* Redesigned Category Filter - Modern Underline Style */}
+            {/* Category Filter */}
             <div
               style={{
                 display: "flex",
@@ -1177,7 +1149,6 @@ const BlogGrid = () => {
                   }}
                 >
                   {cat}
-                  {/* Active indicator - modern underline bar */}
                   {activeCategory === cat && (
                     <motion.div
                       layoutId="activeCategory"
@@ -1194,7 +1165,6 @@ const BlogGrid = () => {
                       transition={{type: "spring", stiffness: 500, damping: 30}}
                     />
                   )}
-                  {/* Hover effect */}
                   <span
                     style={{
                       position: "absolute",
@@ -1213,14 +1183,7 @@ const BlogGrid = () => {
             </div>
           </div>
 
-          {/* Add hover line effect styles */}
-          <style>{`
-          button:hover .hover-line {
-            width: 80% !important;
-          }
-        `}</style>
-
-          {/* Filtered grid with enhanced animations */}
+          {/* Filtered grid */}
           <AnimatePresence mode="wait">
             <motion.div
               key={activeCategory}

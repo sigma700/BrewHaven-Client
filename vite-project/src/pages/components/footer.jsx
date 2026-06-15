@@ -315,21 +315,7 @@ const Footer = () => {
                   gap: 12,
                   marginBottom: 20,
                 }}
-              >
-                <span className="ft-rule" />
-                <span
-                  style={{
-                    fontFamily: "'Josefin Sans', sans-serif",
-                    fontSize: "0.55rem",
-                    letterSpacing: "0.28em",
-                    color: "#C17D3C",
-                    textTransform: "uppercase",
-                    fontWeight: 600,
-                  }}
-                >
-                  Est. 2012
-                </span>
-              </div>
+              ></div>
 
               <p
                 style={{
