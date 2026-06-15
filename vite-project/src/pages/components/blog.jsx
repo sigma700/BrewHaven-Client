@@ -44,13 +44,13 @@ const coffeeStories = [
     subtitle: "Climate Change Reshapes Production",
     excerpt:
       "Across Latin America and East Africa, coffee growers are relocating farms to higher elevations as warming temperatures threaten traditional growing zones.",
-    image: "/higher-altitude-coffee.jpg",
+    image: "/pexels-kenzero14-19330776.jpg",
     category: "Climate",
     readTime: "5 min",
     date: "Jan 14, 2026",
     source: "Reuters",
     color: "#3A5A40",
-    featured: false,
+    featured: true,
   },
   {
     id: 12,
@@ -58,7 +58,7 @@ const coffeeStories = [
     subtitle: "Why Consumers Are Paying More",
     excerpt:
       "Demand for traceable, ethically sourced coffee continues to rise as consumers increasingly value quality, sustainability and origin transparency.",
-    image: "/specialty-coffee.jpg",
+    image: "/lekhashri-k-cTly5TvGnDU-unsplash.jpg",
     category: "Consumer Trends",
     readTime: "4 min",
     date: "Dec 8, 2025",
@@ -78,7 +78,7 @@ const coffeeStories = [
     date: "Nov 28, 2025",
     source: "Daily Nation",
     color: "#5B412C",
-    featured: false,
+    featured: true,
   },
   {
     id: 14,
@@ -86,7 +86,7 @@ const coffeeStories = [
     subtitle: "Design, Community & Craft",
     excerpt:
       "Award-winning coffee shops are redefining customer experience through architecture, storytelling and meticulous brewing techniques.",
-    image: "/world-best-cafes.jpg",
+    image: "/worlds-best-cafes.jpg",
     category: "Culture",
     readTime: "3 min",
     date: "Feb 2, 2026",
@@ -109,20 +109,6 @@ const coffeeStories = [
     color: "#1C3A5C",
     featured: false,
   },
-  {
-    id: 6,
-    title: "The King's Failed Experiment",
-    subtitle: "Gustav III vs. Coffee",
-    excerpt:
-      "How Gustav III's attempt to prove coffee's dangers backfired spectacularly in the 18th century Swedish court.",
-    image: "/experiment.jpg",
-    category: "History",
-    readTime: "3 min",
-    date: "Oct 12, 2025",
-    source: "Cuisine Barista",
-    color: "#3D2B1F",
-    featured: false,
-  },
 
   {
     id: 8,
@@ -130,7 +116,7 @@ const coffeeStories = [
     subtitle: "A Disease That Crippled Farms",
     excerpt:
       "Coffee leaf rust devastated farms across Latin America, wiping out harvests and threatening livelihoods as growers fought to save their crops from a relentless fungal outbreak.",
-    image: "/coffee-rust.jpg",
+    image: "/pexels-daniel-reche-718241-5266773.jpg",
     category: "Agriculture",
     readTime: "4 min",
     date: "Oct 16, 2018",
@@ -144,26 +130,12 @@ const coffeeStories = [
     subtitle: "Protecting Kenya's Coffee Future",
     excerpt:
       "Kenyan farmers are intensifying efforts against coffee berry disease and leaf rust as climate pressures increase the vulnerability of coffee farms across the country.",
-    image: "/kenya-coffee-farmers.jpg",
+    image: "/pexels-1500mcoffee-30658793.jpg",
     category: "Africa",
     readTime: "4 min",
     date: "Apr 13, 2025",
     source: "Kenya News Agency",
     color: "#5B412C",
-    featured: false,
-  },
-  {
-    id: 10,
-    title: "A Champion's Journey",
-    subtitle: "Jack Simpson Reaches The Top",
-    excerpt:
-      "After years of international competition and near misses, Australian barista Jack Simpson captured the 2025 World Barista Championship in Milan.",
-    image: "/jack-simpson.jpg",
-    category: "Championships",
-    readTime: "3 min",
-    date: "Oct 21, 2025",
-    source: "World Coffee Championships",
-    color: "#1E3A5F",
     featured: false,
   },
 ];
@@ -985,6 +957,7 @@ const categories = [
 ══════════════════════════════════════════════════════════════ */
 const BlogGrid = () => {
   const [activeCategory, setActiveCategory] = useState("All");
+  const [showAll, setShowAll] = useState(false);
 
   const featured = coffeeStories.filter((s) => s.featured);
   const allNonFeat = coffeeStories.filter((s) => !s.featured);
@@ -992,6 +965,7 @@ const BlogGrid = () => {
     activeCategory === "All"
       ? allNonFeat
       : allNonFeat.filter((s) => s.category === activeCategory);
+  const displayedStories = showAll ? filtered : filtered.slice(0, 6);
 
   return (
     <>
@@ -1098,9 +1072,8 @@ const BlogGrid = () => {
             }}
           >
             <div>
-              <span className="blog-section-label" style={{marginBottom: 8}}>
-                From the Archive
-              </span>
+              <span className="blog-section-label">From the Archive</span>
+
               <h3
                 style={{
                   fontFamily: "'Playfair Display', serif",
@@ -1110,10 +1083,24 @@ const BlogGrid = () => {
                   letterSpacing: "-0.02em",
                   lineHeight: 1.2,
                   marginTop: 16,
+                  marginBottom: 10,
                 }}
               >
                 More Stories
               </h3>
+
+              <p
+                style={{
+                  maxWidth: 500,
+                  color: "rgba(28,10,0,.55)",
+                  fontSize: ".95rem",
+                  lineHeight: 1.8,
+                  fontWeight: 300,
+                }}
+              >
+                Insights, trends and stories shaping coffee culture,
+                sustainability and the future of specialty coffee.
+              </p>
             </div>
 
             {/* Category Filter */}
@@ -1199,7 +1186,7 @@ const BlogGrid = () => {
               }}
             >
               {filtered.length > 0 ? (
-                filtered.map((story, i) => (
+                displayedStories.map((story, i) => (
                   <motion.div
                     key={story.id}
                     initial={{opacity: 0, scale: 0.95}}
@@ -1242,6 +1229,38 @@ const BlogGrid = () => {
                 </motion.div>
               )}
             </motion.div>
+            {filtered.length > 6 && (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "3rem",
+                }}
+              >
+                <motion.button
+                  whileHover={{scale: 1.05}}
+                  whileTap={{scale: 0.95}}
+                  onClick={() => setShowAll(!showAll)}
+                  style={{
+                    padding: "14px 32px",
+                    borderRadius: "999px",
+                    border: "1px solid rgba(193,125,60,0.18)",
+                    background: "#fff",
+                    color: "var(--espresso)",
+                    cursor: "pointer",
+                    fontFamily: "'Josefin Sans', sans-serif",
+                    letterSpacing: ".15em",
+                    textTransform: "uppercase",
+                    fontWeight: 600,
+                    fontSize: ".72rem",
+                    transition: "all .3s ease",
+                    boxShadow: "0 10px 30px rgba(0,0,0,.04)",
+                  }}
+                >
+                  {showAll ? "Show Less" : "View More Stories"}
+                </motion.button>
+              </div>
+            )}
           </AnimatePresence>
         </motion.div>
       </div>
